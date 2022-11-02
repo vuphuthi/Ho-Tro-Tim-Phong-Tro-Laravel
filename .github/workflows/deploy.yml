@@ -36,4 +36,7 @@ jobs:
                       cd /var/www/khodoan/seri-phongtro
                       git pull origin master
                       composer install
+                      chgrp -R www-data storage bootstrap/cache
+                      chmod -R ug+rwx storage bootstrap/cache
+                      
                       
