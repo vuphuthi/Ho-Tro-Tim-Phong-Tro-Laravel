@@ -1,0 +1,53 @@
+.top-location{
+    margin-top: 20px;
+    &__header{
+        margin-bottom: 15px;
+        .page-h1{
+            font-size: 22px;
+            margin: 0 0 5px;
+            font-weight: 600;
+        }
+        .page-description{
+            font-size: 13px;
+        }
+    }
+    &__body{
+        .body-title{
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .location-list{
+            display: flex;
+            justify-content: center;
+            .location-item{
+                display: inline-block;
+                width: 190px;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 0 10px 1px rgb(0 0 0 / 10%);
+                margin: 0 10px;
+                color: #007aff;
+                >img{
+                    object-fit: contain;
+                    width: 100%;
+                    display: block;
+                }
+                .location-cat {
+                    text-align: center;
+                    padding: 12px 10px;
+                    display: block;
+                    background-color: #fff;
+                    width: 100%;
+                    .location-name{
+                        font-weight: 700;
+                    }
+                }
+                &:hover {
+                    box-shadow: 0 0 10px 10px rgb(0 0 0 / 5%);
+                }
+            }
+        }
+    }
+}
