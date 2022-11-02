@@ -1,27 +1,39 @@
-name: Deploy To Production
+name: Deploy
 
-# Triggers
 on:
     push:
-        branches:
-            - master
+        branches: [ master ]
     pull_request:
-        branches:
-            - master
-# Functions
+        branches: [ master ]
+
 jobs:
-    # Build Job
     build:
-        # Name of the job
-        name: Build Reactjs
-        # The OS to run the job on
-        runs-on: self-hosted
-        # Steps
+
+        runs-on: ubuntu-latest
+
         steps:
-            - name: Checkout Code
-              uses: actions/checkout@v2
+            - uses: actions/checkout@v1
+
+            - name: SCP FOLDER
+              uses: appleboy/scp-action@master
+              env:
+                  HOST: ${{ secrets.IP }}
+                  USERNAME: ${{ secrets.USERNAME }}
+                  PORT: ${{ secrets.PORT }}
+                  PASSWORD: ${{ secrets.PASSWORD }}
               with:
-                  node-version: ${{ matrix.node-version}}
-            - run: git pull origin master
-            - run: composer install
-            - run: php artisan migrate
+                  source: "."
+                  target: "/var/www/khodoan/seri-phongtro"
+
+            - name: Deploy
+              uses: appleboy/ssh-action@master
+              with:
+                  HOST: ${{ secrets.IP }}
+                  USERNAME: ${{ secrets.USERNAME }}
+                  PORT: ${{ secrets.PORT }}
+                  PASSWORD: ${{ secrets.PASSWORD }}
+                  script: |
+                      cd /var/www/khodoan/seri-phongtro
+                      git pull origin master
+                      composer install
+                      
