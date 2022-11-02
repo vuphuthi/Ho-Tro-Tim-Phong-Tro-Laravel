@@ -36,6 +36,9 @@ jobs:
                       cd /var/www/khodoan/seri-phongtro
                       git pull origin master
                       composer install
-                      sudo chmod -R 755 storage
+                      chmod -R 755 storage
+                      php artisan view:clear
+                      php artisan config:clear
+                      php artisan config:cache
                       
                       
