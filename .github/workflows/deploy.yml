@@ -1,0 +1,27 @@
+name: Deploy To Production
+
+# Triggers
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+# Functions
+jobs:
+    # Build Job
+    build:
+        # Name of the job
+        name: Build Reactjs
+        # The OS to run the job on
+        runs-on: self-hosted
+        # Steps
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v2
+              with:
+                  node-version: ${{ matrix.node-version}}
+            - run: git pull origin master
+            - run: composer install
+            - run: php artisan migrate

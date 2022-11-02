@@ -3,6 +3,7 @@
 
 ## DEPLOY
 - TOKEN => GR1348941ZND5VzQotRyEyJZuhh5X
+- GITHUB => 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
 
 
 
@@ -13,7 +14,7 @@ https://heliotech.me/blog/gitlab-ci
 
 
 
-
+/var/www/khodoan/seri-phongtro
 
 
 
