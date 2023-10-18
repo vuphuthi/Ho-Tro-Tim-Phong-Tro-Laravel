@@ -14,6 +14,6 @@ class LocationService
 {
     public static function getLocationsHot($limit)
     {
-        return Location::where('hot',1)->limit($limit)->get();
+        return Location::withCount('rooms')->where('hot',1)->limit($limit)->get();
     }
 }

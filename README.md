@@ -38,6 +38,9 @@ https://heliotech.me/blog/gitlab-ci
 `Và mỗi tin chỉ tồn tại trên hệ thống 5 ngày`
 
 
+`
+    Tin nổi bật 5* hiển thị trang chủ
+`
 
 
 Terminal ID / Mã Website (vnp_TmnCode): Q2KB8XR2

@@ -17,11 +17,12 @@ class PageLocationService
     public static function index($id, Request $request)
     {
         $location = Location::find($id);
-        $rooms    = RoomService::getListsRoom($request, $params = [
-            'location_city_id' => $id
-        ]);
+        $params = $request->all();
+        $params['location_city_id'] = $id;
 
-        $districts = Location::where('parent_id', $id)->limit(24)->get();
+        $rooms    = RoomService::getListsRoom($request, $params);
+        $districts = Location::withCount('roomDistricts')->where('parent_id', $id)
+                ->limit(24)->get();
 
         return [
             'location'  => $location,
@@ -36,6 +37,20 @@ class PageLocationService
         $location = Location::find($id);
         $rooms    = RoomService::getListsRoom($request, $params = [
             'location_district_id' => $id
+        ]);
+
+        return [
+            'location'  => $location,
+            'rooms'     => $rooms,
+            'query'     => $request->query()
+        ];
+    }
+
+    public static function indexByWards($id, Request $request)
+    {
+        $location = Location::find($id);
+        $rooms    = RoomService::getListsRoom($request, $params = [
+            'wards_id' => $id
         ]);
 
         return [

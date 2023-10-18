@@ -13,9 +13,16 @@ class AdminCategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = Category::orderByDesc('id')->paginate(20);
-        $viewData   = [
-            'categories' => $categories
+        $categories = Category::whereRaw(1);
+
+        if ($request->n)
+            $categories->where('name', 'like', '%' . $request->n . '%');
+
+        $categories = $categories->orderByDesc('id')->paginate(20);
+
+        $viewData = [
+            'categories' => $categories,
+            'query'      => $request->query()
         ];
 
         return view('admin.pages.category.index', $viewData);
@@ -68,5 +75,11 @@ class AdminCategoryController extends Controller
             Log::error("---------------------  " . $exception->getMessage());
             return redirect()->back();
         }
+    }
+
+    public function delete($id)
+    {
+        Category::find($id)->delete();
+        return redirect()->back();
     }
 }

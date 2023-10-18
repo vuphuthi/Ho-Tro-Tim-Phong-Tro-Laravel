@@ -19,8 +19,8 @@ class UserRoomController extends Controller
 {
     public function index(Request $request)
     {
-        $rooms = Room::with('category:id,name')->where("auth_id", \Auth::user()->id);
-
+        $rooms = Room::with('category:id,name,slug', 'city:id,name,slug', 'district:id,name,slug', 'wards:id,name,slug', 'paymentHistory:id,room_id')
+            ->where("auth_id", \Auth::user()->id);
 
         $rooms = $rooms->orderByDesc("id")->paginate(20);
 
@@ -50,8 +50,9 @@ class UserRoomController extends Controller
 
     public function store(UserRoomRequest $request)
     {
-        $data               = $request->except('_token', 'avatar');
+        $data               = $request->except('_token', 'avatar', 'file');
         $data['created_at'] = Carbon::now();
+        $data['status']     = Room::STATUS_EXPIRED;
         $data['slug']       = Str::slug($request->name);
         $data['auth_id']    = \Auth::user()->id;
         if ($request->avatar) {
@@ -65,6 +66,9 @@ class UserRoomController extends Controller
 
         $room = Room::create($data);
         if ($room) {
+            if ($request->file) {
+                $this->syncAlbumImageAndProduct($request->file, $room->id);
+            }
             return redirect()->route('get_user.room.index');
         }
 
@@ -84,11 +88,15 @@ class UserRoomController extends Controller
         $districts  = Location::select('id', 'name')->where('type', 2)->get();
         $wards      = Location::select('id', 'name')->where('type', 3)->get();
         $categories = Category::select('id', 'name')->get();
+        $images     = \DB::table('images')
+            ->where("room_id", $id)
+            ->get();
 
         $viewData = [
             'cities'     => $cities,
             'districts'  => $districts,
             'wards'      => $wards,
+            'images'     => $images,
             'categories' => $categories,
             'room'       => $room
         ];
@@ -99,7 +107,7 @@ class UserRoomController extends Controller
 
     public function update($id, UserRoomRequest $request)
     {
-        $data               = $request->except('_token', 'avatar');
+        $data               = $request->except('_token', 'avatar', 'file');
         $data['updated_at'] = Carbon::now();
         $data['price']      = str_replace('.', '', $request->price);
         $data['slug']       = Str::slug($request->name);
@@ -123,6 +131,9 @@ class UserRoomController extends Controller
         ])->update($data);
 
         if ($room) {
+            if ($request->file) {
+                $this->syncAlbumImageAndProduct($request->file, $id);
+            }
             return redirect()->route('get_user.room.index');
         }
 
@@ -131,8 +142,7 @@ class UserRoomController extends Controller
 
     protected function switchPrice($data)
     {
-        switch ($data['price'])
-        {
+        switch ($data['price']) {
             case $data['price'] < 1000000:
                 $data['range_price'] = 1;
                 break;
@@ -161,7 +171,7 @@ class UserRoomController extends Controller
                 $data['range_price'] = 7;
                 break;
 
-            case ($data['price'] >= 15000000 ):
+            case ($data['price'] >= 15000000):
                 $data['range_price'] = 8;
                 break;
         }
@@ -171,8 +181,7 @@ class UserRoomController extends Controller
 
     protected function switchArea($data)
     {
-        switch ($data['area'])
-        {
+        switch ($data['area']) {
             case $data['area'] < 20:
                 $data['range_area'] = 1;
                 break;
@@ -234,7 +243,7 @@ class UserRoomController extends Controller
 
     public function savePayRoom($id, Request $request)
     {
-        $room = Room::find($id);
+        $room            = Room::find($id);
         $data            = $request->all();
         $roomType        = $request->room_type;
         $configPriceType = config('payment.type_price');
@@ -269,21 +278,109 @@ class UserRoomController extends Controller
                 ->decrement('account_balance', $totalMoney);
 
             $timeStartNow = Carbon::parse($request->time_start);
-            $timeStop = $timeStartNow->addDay($request->day);
+            $timeStop     = $timeStartNow->addDay($request->day);
             // Update tin
-            $room->status = Room::STATUS_ACTIVE;
-            $room->time_start = $request->time_start;
-            $room->time_stop = $timeStop->format('Y-m-d');
+            $room->status      = Room::STATUS_PAID;
+            $room->time_start  = $request->time_start;
+            $room->time_stop   = $timeStop->format('Y-m-d');
             $room->service_hot = $roomType;
-            $room->updated_at = Carbon::now();
+            $room->updated_at  = Carbon::now();
             $room->save();
             DB::commit();
 
-            return  redirect()->route('get_user.room.index');
+            return redirect()->route('get_user.room.index');
         } catch (\Exception $exception) {
             DB::rollBack();
             Log::error("---------------------  " . $exception->getMessage());
-            return  redirect()->back();
+            return redirect()->back();
         }
+    }
+
+    public function loadDistrict(Request $request)
+    {
+        if ($request->ajax()) {
+            $city      = $request->city_id;
+            $locations = Location::where('parent_id', $city)->select('id', 'name', 'slug')->get();
+
+            return response()->json($locations);
+        }
+    }
+
+
+    public function hideRoom($id)
+    {
+        $room         = Room::find($id);
+        $room->status = Room::STATUS_DEFAULT;
+        $room->save();
+
+        return redirect()->back();
+    }
+
+    public function activeRoom($id)
+    {
+        $today         = Date::today()->format('Y-m-d');
+        $checkTimeRoom = Room::with('category:id,name,slug', 'city:id,name,slug')
+            ->whereDate('time_start', '<=', $today)
+            ->whereDate('time_stop', '>=', $today)
+            ->find($id);
+
+        if (!$checkTimeRoom) {
+            // Update status của room
+            DB::table('rooms')->where('id', $id)
+                ->update([
+                    'status'      => Room::STATUS_EXPIRED,
+                    'service_hot' => 0
+                ]);
+        } else {
+            DB::table('rooms')->where('id', $id)
+                ->update([
+                    'status' => Room::STATUS_ACTIVE,
+                ]);
+        }
+
+        return redirect()->back();
+    }
+
+    public function loadWards(Request $request)
+    {
+        if ($request->ajax()) {
+            $district_id = $request->district_id;
+            $locations   = Location::where('parent_id', $district_id)->select('id', 'name', 'slug')->get();
+
+            return response()->json($locations);
+        }
+    }
+
+    public function syncAlbumImageAndProduct($files, $productID)
+    {
+        foreach ($files as $key => $fileImage) {
+            $ext    = $fileImage->getClientOriginalExtension();
+            $extend = [
+                'png', 'jpg', 'jpeg', 'PNG', 'JPG'
+            ];
+
+            if (!in_array($ext, $extend)) return false;
+
+            $filename = date('Y-m-d__') . Str::slug($fileImage->getClientOriginalName()) . '.' . $ext;
+            $path     = public_path() . '/uploads/' . date('Y/m/d/');
+            if (!\File::exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            $fileImage->move($path, $filename);
+            \DB::table('images')
+                ->insert([
+                    'name'       => $fileImage->getClientOriginalName(),
+                    'path'       => $filename,
+                    'room_id'    => $productID,
+                    'created_at' => Carbon::now()
+                ]);
+        }
+    }
+
+    public function deleteImage($imageID)
+    {
+        \DB::table('images')->where('id', $imageID)->delete();
+        return redirect()->back();
     }
 }

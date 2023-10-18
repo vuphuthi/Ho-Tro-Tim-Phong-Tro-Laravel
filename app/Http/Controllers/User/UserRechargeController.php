@@ -116,10 +116,7 @@ class UserRechargeController extends Controller
             $vnp_Bill_LastName = array_pop($name);
         }
 
-//        $vnp_Bill_Address=$_POST['txt_inv_addr1'];
-//        $vnp_Bill_City=$_POST['txt_bill_city'];
         $vnp_Bill_Country= 'VN';
-//        $vnp_Bill_State=$_POST['txt_bill_state'];
 
         $vnp_Inv_Phone= $vnp_Bill_Mobile;
         $vnp_Inv_Email= $vnp_Bill_Email;
@@ -141,13 +138,8 @@ class UserRechargeController extends Controller
             "vnp_OrderType" => $vnp_OrderType,
             "vnp_ReturnUrl" => $vnp_Returnurl,
             "vnp_TxnRef" => $vnp_TxnRef,
-//            "vnp_ExpireDate"=>$vnp_ExpireDate,
             "vnp_Bill_Mobile"=>$vnp_Bill_Mobile,
             "vnp_Bill_Email"=>$vnp_Bill_Email,
-//            "vnp_Bill_FirstName"=>$vnp_Bill_FirstName,
-//            "vnp_Bill_LastName"=>$vnp_Bill_LastName,
-//            "vnp_Bill_Address"=>$vnp_Bill_Address,
-//            "vnp_Bill_City"=>$vnp_Bill_City,
             "vnp_Bill_Country"=>$vnp_Bill_Country,
             "vnp_Inv_Phone"=>$vnp_Inv_Phone,
             "vnp_Inv_Email"=>$vnp_Inv_Email,

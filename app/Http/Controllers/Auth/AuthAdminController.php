@@ -28,6 +28,6 @@ class AuthAdminController extends Controller
         Auth::guard('admins')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect()->route('get_admin.login');
     }
 }

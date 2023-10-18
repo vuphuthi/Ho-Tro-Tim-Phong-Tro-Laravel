@@ -90,7 +90,7 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{{ route('get_admin.home.index') }}">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('get_admin.location.index') }}">Location</a>
@@ -110,12 +110,24 @@
                     </li>
 
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('get_admin.recharge_pay.index') }}" title="Category">Pay</a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('get_admin.article.index') }}" title="Article">Article</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown js-drop-menu">
+                        <a class="nav-link dropdown-toggle" href="#" id="menuAccount" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="40" height="40" class="rounded-circle">
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="menuAccount">
+                            <a class="dropdown-item" href="{{ route('get_admin.logout') }}" title="Logout">Đăng xuất</a>
+                        </div>
+                    </li>
+                </ul>
+
             </div>
         </div>
     </nav>
@@ -134,7 +146,23 @@
     </div>
 </footer>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
 <script src="https://getbootstrap.com/docs/5.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script>
+    $(function (){
+        $(".js-drop-menu").click( function (event){
+            console.log('------------ click');
+            let $this = $(this);
+            if ($this.hasClass('show')) {
+                $this.removeClass('show')
+                $this.find(".dropdown-menu").removeClass('show');
+            } else  {
+                $this.addClass('show')
+                $this.find(".dropdown-menu").addClass('show');
+            }
+        })
+    })
+</script>
 </body>
 </html>

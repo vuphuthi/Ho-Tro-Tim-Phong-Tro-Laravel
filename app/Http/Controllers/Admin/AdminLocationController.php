@@ -11,12 +11,18 @@ use Illuminate\Support\Str;
 
 class AdminLocationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $locations = Location::orderByDesc('id')->paginate(20);
+        $locations = Location::whereRaw(1);
+
+        if ($request->n)
+            $locations->where('name', 'like', '%' . $request->n . '%');
+
+        $locations = $locations->orderByDesc('id')->paginate(10);
 
         $viewData = [
-            'locations' => $locations
+            'locations' => $locations,
+            'query'     => $request->query()
         ];
 
         return view('admin.pages.location.index', $viewData);
@@ -24,7 +30,7 @@ class AdminLocationController extends Controller
 
     public function create()
     {
-        $cities = Location::where('parent_id', 0)->get();
+        $cities = Location::get();
 
         $viewData = [
             'cities' => $cities
@@ -36,7 +42,7 @@ class AdminLocationController extends Controller
     public function store(Request $request)
     {
         try {
-            $data               = $request->except('_token','avatar');
+            $data               = $request->except('_token', 'avatar');
             $data['slug']       = Str::slug($request->name);
             $data['created_at'] = Carbon::now();
             if ($request->avatar) {
@@ -45,7 +51,7 @@ class AdminLocationController extends Controller
                     $data['avatar'] = $file['name'];
                 }
             }
-            $location           = Location::create($data);
+            $location = Location::create($data);
 
             return redirect()->route('get_admin.location.index');
         } catch (\Exception $exception) {
@@ -57,7 +63,7 @@ class AdminLocationController extends Controller
     public function edit($id)
     {
         $location = Location::find($id);
-        $cities   = Location::where('parent_id', 0)->get();
+        $cities   = Location::get();
         $viewData = [
             'location' => $location,
             'cities'   => $cities
@@ -69,7 +75,7 @@ class AdminLocationController extends Controller
     public function update($id, Request $request)
     {
         try {
-            $data               = $request->except('_token','avatar');
+            $data               = $request->except('_token', 'avatar');
             $data['slug']       = Str::slug($request->name);
             $data['updated_at'] = Carbon::now();
 
@@ -87,5 +93,11 @@ class AdminLocationController extends Controller
             Log::error("---------------------  " . $exception->getMessage());
             return redirect()->back();
         }
+    }
+
+    public function delete($id)
+    {
+        Location::find($id)->delete();
+        return redirect()->back();
     }
 }

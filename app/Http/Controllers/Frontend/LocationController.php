@@ -21,4 +21,10 @@ class LocationController extends Controller
 
         return view('frontend.pages.location.index', $data);
     }
+
+    public function getRoomByWards($slug, $id, Request $request)
+    {
+        $data = PageLocationService::indexByWards($id, $request);
+        return view('frontend.pages.location.index', $data);
+    }
 }

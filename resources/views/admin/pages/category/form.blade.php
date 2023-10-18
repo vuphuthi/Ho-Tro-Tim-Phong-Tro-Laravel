@@ -3,7 +3,7 @@
     <div class="mb-3">
         <label class="form-label">Tên danh mục</label>
         <input type="text" class="form-control" name="name" value="{{ old('name', $category->name ?? '') }}"
-               aria-describedby="emailHelp" placeholder="Tỉnh location">
+               aria-describedby="emailHelp" placeholder="Name ...">
     </div>
     <div class="mb-3">
         <label class="form-label">Mô tả</label>

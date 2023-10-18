@@ -10,9 +10,15 @@
         </div>
         <div class="location-list">
             @foreach($locationsHot ?? [] as $item)
-                <a class="location-item city-1" href="{{ route('get.room.by_location',['id' => $item->id, 'slug' => $item->slug]) }}" title="Cho thuê phòng trọ {{ $item->name }}">
+                @php
+                    $route = 'get.room.by_location';
+                    if ($item->type == 2)
+                        $route = 'get.room.by_district';
+
+                @endphp
+                <a class="location-item city-1" href="{{ route($route,['id' => $item->id, 'slug' => $item->slug]) }}" title="Cho thuê phòng trọ {{ $item->name }}">
                     <img src="{{ pare_url_file($item->avatar) }}" style="height: 110px;object-fit:cover" alt="">
-                    <span class="location-cat">Phòng trọ <span class="location-name">{{ $item->name }}</span></span>
+                    <span class="location-cat">Phòng trọ <span class="location-name">{{ $item->name }}</span><span>({{ $item->rooms_count ?? 0  }})</span></span>
                 </a>
             @endforeach
         </div>

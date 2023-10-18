@@ -12,7 +12,7 @@
                 </div>
                 <a href="{{ route('get_user.recharge.history') }}" class="text-bold text-success">Lịch sử nạp tiền</a>  <a href=""> \ </a>
                 <a href="{{ route('get_user.payment.history') }}" class="text-bold text-danger">Lịch sử thanh toán</a>
-                <a rel="nofollow" class="btn btn-pink btn-add-post" href="{{ route('get_user.room.index') }}">
+                <a rel="nofollow" class="btn btn-pink btn-add-post" href="{{ route('get_user.room.create') }}">
                     Đăng tin mới
                     <i class="la la-plus-circle" aria-hidden="true"></i>
                 </a>
@@ -39,11 +39,10 @@
         <li class="navbar_item {{ \Request::route()->getName() == 'get.blog.index' ? 'active' : '' }}">
             <a href="{{ route('get.blog.index') }}" title="Bài viết">Bài viết</a>
         </li>
-{{--        <li class="navbar_item"><a href="#">Hướng dẫn</a></li>--}}
         <li class="navbar_item {{ \Request::route()->getName() == 'get_user.recharge.index' ? 'active' : '' }}">
             <a href="{{ route('get_user.recharge.index') }}" title="Nạp tiền">Nạp tiền</a>
         </li>
-{{--        <li class="navbar_item"><a href="#">Bảng giá</a></li>--}}
+        <li class="navbar_item {{ \Request::route()->getName() == 'get.service.price' ? 'active' : '' }}"><a href="{{ route('get.service.price') }}">Bảng giá</a></li>
     </ul>
 </nav>
 

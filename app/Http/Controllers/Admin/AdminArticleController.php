@@ -14,7 +14,14 @@ class AdminArticleController extends Controller
 {
     public function index(Request $request)
     {
-        $articles = Article::orderByDesc('id')->paginate(20);
+        $articles = Article::whereRaw(1);
+
+        if ($request->n)
+            $articles->where('name', 'like', '%' . $request->n . '%');
+
+        $articles = $articles->orderByDesc('id')->paginate(20);
+
+
         $viewData   = [
             'articles' => $articles
         ];
@@ -80,5 +87,11 @@ class AdminArticleController extends Controller
             Log::error("---------------------  " . $exception->getMessage());
             return redirect()->back();
         }
+    }
+
+    public function delete($id)
+    {
+        Article::find($id)->delete();
+        return redirect()->back();
     }
 }

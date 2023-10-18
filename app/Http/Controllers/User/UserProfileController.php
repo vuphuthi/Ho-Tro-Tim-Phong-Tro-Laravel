@@ -23,6 +23,14 @@ class UserProfileController extends Controller
         if (!$user) return abort(404);
         $user->name = $request->name;
         $user->email = $request->email;
+
+        if ($request->avatar) {
+            $file = upload_image('avatar');
+            if (isset($file) && $file['code'] == 1) {
+                $user->avatar = $file['name'];
+            }
+        }
+
         $user->save();
 
         return  redirect()->route('get_user.profile.index');

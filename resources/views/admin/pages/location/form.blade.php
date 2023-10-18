@@ -13,16 +13,14 @@
             <option value="3" {{ ($location->type ?? 1)  == 3 ? "selected" : "" }}>Phường xã</option>
         </select>
     </div>
-    @if (isset($location) && $location->type == 2)
-        <div class="mb-3">
-            <label class="form-label">Tỉnh thành</label>
-            <select class="form-select" name="parent_id" aria-label="Default select example">
-                @foreach($cities ?? [] as $item)
-                    <option value="{{ $item->id }}" {{ $item->id == ($location->parent_id ?? 0) ? "selected" : "" }}>{{ $item->name }}</option>
-                @endforeach
-            </select>
-        </div>
-    @endif
+    <div class="mb-3">
+        <label class="form-label">Parent</label>
+        <select class="form-select" name="parent_id" aria-label="Default select example">
+            @foreach($cities ?? [] as $item)
+                <option value="{{ $item->id }}" {{ $item->id == ($location->parent_id ?? 0) ? "selected" : "" }}>{{ $item->name }}</option>
+            @endforeach
+        </select>
+    </div>
     <div class="mb-3">
         <label for="name">Ảnh bìa</label>
         <input type="file" name="avatar">

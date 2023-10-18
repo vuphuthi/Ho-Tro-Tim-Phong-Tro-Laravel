@@ -50,4 +50,7 @@
         @endforeach
         </tbody>
     </table>
+    <div>
+        {!! $rechargeHistory->appends($query ?? [])->links('vendor.pagination.bootstrap-4') !!}
+    </div>
 @stop

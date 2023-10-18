@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PaymentHistory;
 use App\Models\RechargeHistory;
 use App\Models\User;
 use Carbon\Carbon;
@@ -20,6 +21,18 @@ class AdminRechargeController extends Controller
         ];
 
         return view('admin.pages.recharge.index', $viewData);
+    }
+
+    public function indexPay(Request $request)
+    {
+        $paymentHistory = PaymentHistory::with('user:id,name')
+            ->orderByDesc('id')->paginate(20);
+
+        $viewData = [
+            'paymentHistory' => $paymentHistory
+        ];
+
+        return view('admin.pages.recharge.pay', $viewData);
     }
 
     public function create()

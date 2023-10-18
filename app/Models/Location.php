@@ -24,4 +24,14 @@ class Location extends Model
         return Arr::get($this->setType, $this->type,'...');
     }
 
+    public function roomDistricts()
+    {
+        return $this->hasMany(Room::class,'district_id');
+    }
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class,'city_id');
+    }
+
 }

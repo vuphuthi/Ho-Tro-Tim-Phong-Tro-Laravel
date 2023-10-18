@@ -32,30 +32,6 @@ Route::group(['namespace' => 'Auth'], function (){
 
 Route::group(['namespace' => 'Frontend'], function (){
     Route::get('','HomeController@index')->name('get.home');
-    Route::get('tim-kiem','SearchRoomController@index')->name('get.room.search');
-    Route::get('chuyen-muc-{slug}-{id}','CategoryController@index')
-        ->name('get.category.item')
-        ->where(['slug' => '[a-z-0-9-]+', 'id' => '[0-9]+',]);
-
-    Route::get('room/{slug}-{id}','RoomDetailController@detail')
-        ->name('get.room.detail')
-        ->where(['slug' => '[a-z-0-9-]+', 'id' => '[0-9]+',]);
-
-    Route::get('tinh-thanh/{slug}-{id}','LocationController@getRoomByLocation')
-        ->name('get.room.by_location')
-        ->where(['slug' => '[a-z-0-9-]+', 'id' => '[0-9]+',]);
-
-    Route::get('quan-huyen/{slug}-{id}','LocationController@getRoomByDistrict')
-        ->name('get.room.by_district')
-        ->where(['slug' => '[a-z-0-9-]+', 'id' => '[0-9]+',]);
-
-    Route::get('bai-viet','BlogController@index')
-        ->name('get.blog.index');
-
-    Route::get('bai-viet/{slug}-{id}','BlogController@getArticleDetail')
-        ->name('get.room.blog_detail')
-        ->where(['slug' => '[a-z-0-9-]+', 'id' => '[0-9]+',]);
 });
 
-include 'route_user.php';
 include 'route_admin.php';

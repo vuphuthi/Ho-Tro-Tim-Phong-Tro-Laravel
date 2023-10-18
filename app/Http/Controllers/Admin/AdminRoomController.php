@@ -14,26 +14,28 @@ class AdminRoomController extends Controller
 {
     public function index(Request $request)
     {
-        $rooms = Room::with('category:id,name')->orderByDesc('id')->paginate(20);
+        $rooms      = Room::with('category:id,name,slug','city:id,name,slug','district:id,name,slug','wards:id,name,slug');
+        if ($request->category_id)
+            $rooms->where('category_id', $request->category_id);
+
+        if ($request->n)
+            $rooms->where('name', 'like', '%' . $request->n . '%');
+
+        $rooms      = $rooms->orderByDesc('id')->paginate(10);
+        $categories = Category::select('id', 'name')->get();
+
         $viewData   = [
-            'rooms' => $rooms
+            'rooms'      => $rooms,
+            'categories' => $categories,
+            'query'      => $request->query()
         ];
 
         return view('admin.pages.room.index', $viewData);
     }
 
-    public function create()
-    {
-        $viewData = [
-
-        ];
-
-        return view('admin.pages.category.create', $viewData);
-    }
-
     public function success($id)
     {
-        $room = Room::find($id);
+        $room         = Room::find($id);
         $room->status = Room::STATUS_ACTIVE;
         $room->save();
 
@@ -42,8 +44,8 @@ class AdminRoomController extends Controller
 
     public function expires($id)
     {
-        $room = Room::find($id);
-        $room->status = Room::STATUS_EXPIRED;
+        $room            = Room::find($id);
+        $room->status    = Room::STATUS_EXPIRED;
         $room->time_stop = date('Y-m-d');
         $room->save();
 
@@ -52,7 +54,7 @@ class AdminRoomController extends Controller
 
     public function hide($id)
     {
-        $room = Room::find($id);
+        $room         = Room::find($id);
         $room->status = Room::STATUS_DEFAULT;
         $room->save();
 
@@ -61,7 +63,7 @@ class AdminRoomController extends Controller
 
     public function cancel($id)
     {
-        $room = Room::find($id);
+        $room     = Room::find($id);
         $viewData = [
             'room' => $room
         ];
@@ -69,10 +71,10 @@ class AdminRoomController extends Controller
         return view('admin.pages.room.cancel', $viewData);
     }
 
-    public function processCancelRoom($id, Request  $request)
+    public function processCancelRoom($id, Request $request)
     {
         try {
-            $room = Room::find($id);
+            $room         = Room::find($id);
             $room->reason = $request->reason;
             $room->status = -1;
             $room->save();
@@ -83,33 +85,9 @@ class AdminRoomController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function delete($id)
     {
-        try {
-            $data               = $request->except('_token');
-            $data['slug']       = Str::slug($request->name);
-            $data['created_at'] = Carbon::now();
-            Category::create($data);
-
-            return redirect()->route('get_admin.category.index');
-        } catch (\Exception $exception) {
-            Log::error("---------------------  " . $exception->getMessage());
-            return redirect()->back();
-        }
-    }
-
-    public function update($id, Request $request)
-    {
-        try {
-            $data               = $request->except('_token');
-            $data['slug']       = Str::slug($request->name);
-            $data['updated_at'] = Carbon::now();
-            Category::find($id)->update($data);
-
-            return redirect()->route('get_admin.category.index');
-        } catch (\Exception $exception) {
-            Log::error("---------------------  " . $exception->getMessage());
-            return redirect()->back();
-        }
+        Room::find($id)->delete();
+        return redirect()->back();
     }
 }

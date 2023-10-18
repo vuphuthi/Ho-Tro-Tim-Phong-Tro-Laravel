@@ -13,10 +13,12 @@ class Room extends Model
     protected $table = 'rooms';
     protected $guarded = [''];
 
-    const STATUS_DEFAULT = 1;
-    const STATUS_EXPIRED = 2;
-    const STATUS_ACTIVE = 3;
-    const STATUS_CANCEL = -1;
+    const STATUS_DEFAULT = 1; // khởi tạo
+    const STATUS_PAID = 2; // đã thanh toán
+    const STATUS_EXPIRED = -2; // đã thanh toán
+    const STATUS_ACTIVE = 3; // đã duyệt
+    const STATUS_CANCEL = -1; // huỷ bỏ
+
 
     protected $setStatus = [
         self::STATUS_DEFAULT => [
@@ -26,6 +28,10 @@ class Room extends Model
         self::STATUS_EXPIRED => [
             'name' => 'Hết hạn',
             'class' => 'text-danger'
+        ],
+        self::STATUS_PAID => [
+            'name' => 'Đã thanh toán',
+            'class' => 'text-info'
         ],
         self::STATUS_ACTIVE => [
             'name' => 'Hiển thị',
@@ -50,5 +56,17 @@ class Room extends Model
     public function city()
     {
         return $this->belongsTo(Location::class,'city_id');
+    }
+    public function district()
+    {
+        return $this->belongsTo(Location::class,'district_id');
+    }
+    public function wards()
+    {
+        return $this->belongsTo(Location::class,'wards_id');
+    }
+
+    public function paymentHistory(){
+        return $this->hasMany(PaymentHistory::class,'room_id');
     }
 }
