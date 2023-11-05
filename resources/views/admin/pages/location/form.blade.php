@@ -16,6 +16,7 @@
     <div class="mb-3">
         <label class="form-label">Parent</label>
         <select class="form-select" name="parent_id" aria-label="Default select example">
+            <option value="0"></option>
             @foreach($cities ?? [] as $item)
                 <option value="{{ $item->id }}" {{ $item->id == ($location->parent_id ?? 0) ? "selected" : "" }}>{{ $item->name }}</option>
             @endforeach

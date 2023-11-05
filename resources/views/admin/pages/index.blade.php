@@ -39,76 +39,76 @@
             </div>
         </div>
     </div>
-{{--    <div class="row">--}}
-{{--        <div class="col-xl-6">--}}
-{{--            <h5 class="mt-3" style="display: flex;justify-content: space-between"><span>Giao dịch mới</span></h5>--}}
-{{--            <table class="table table-hover">--}}
-{{--                <thead>--}}
-{{--                <tr>--}}
-{{--                    <th style="text-align: left">Mã giao dịch</th>--}}
-{{--                    <th class="text-center">Loại</th>--}}
-{{--                    <th class="text-center">Tổng tiền</th>--}}
-{{--                    <th class="text-center">Tin</th>--}}
-{{--                    <th class="text-center">Ngày tạo</th>--}}
-{{--                </tr>--}}
-{{--                </thead>--}}
-{{--                <tbody>--}}
-{{--                @foreach($paymentHistory ?? [] as $item)--}}
-{{--                    <tr style="text-align: center">--}}
-{{--                        <td style="text-align: left" scope="row">{{ $item->id }}</td>--}}
-{{--                        <td>--}}
-{{--                            @if ($item->type == 1)--}}
-{{--                                <span>Tin tường</span>--}}
-{{--                            @elseif($item->type == 2)--}}
-{{--                                <span>Vip 3</span>--}}
-{{--                            @elseif($item->type == 3)--}}
-{{--                                <span>Vip 2</span>--}}
-{{--                            @elseif($item->type == 4)--}}
-{{--                                <span>Vip 1</span>--}}
-{{--                            @else--}}
-{{--                                <span>Đặc biệt</span>--}}
-{{--                            @endif--}}
-{{--                            <span>{{ $item->type }}</span>--}}
-{{--                        </td>--}}
-{{--                        <td scope="row"><span class="text-danger text-bold">{{ number_format($item->money,0,',','.') }}đ</span></td>--}}
-{{--                        <td scope="row">--}}
-{{--                            <a href="">{{ $item->room_id }}</a>--}}
-{{--                        </td>--}}
-{{--                        <td scope="">--}}
-{{--                            {{ $item->created_at }}--}}
-{{--                        </td>--}}
-{{--                    </tr>--}}
-{{--                @endforeach--}}
-{{--                </tbody>--}}
-{{--            </table>--}}
-{{--        </div>--}}
-{{--        <div class="col-xl-6">--}}
-{{--            <h5 class="mt-3" style="display: flex;justify-content: space-between"><span>Thành viên mới</span></h5>--}}
-{{--            <table class="table table-hover">--}}
-{{--                <thead>--}}
-{{--                <tr>--}}
-{{--                    <th>#</th>--}}
-{{--                    <th>Avatar</th>--}}
-{{--                    <th>Thông tin</th>--}}
-{{--                    <th>Phone</th>--}}
-{{--                    <th>Ngày tạo</th>--}}
-{{--                </tr>--}}
-{{--                </thead>--}}
-{{--                <tbody>--}}
-{{--                @foreach($users ?? [] as $item)--}}
-{{--                    <tr>--}}
-{{--                        <td scope="row">{{ $item->id }}</td>--}}
-{{--                        <td scope="row">--}}
-{{--                            <img src="{{ pare_url_file($item->avatar) }}" style="width: 60px;height: 60px;border-radius: 50%" alt="">--}}
-{{--                        </td>--}}
-{{--                        <td scope="row">{{ $item->name }} <br>{{ $item->email }}</td>--}}
-{{--                        <td scope="row">{{ $item->phone }}</td>--}}
-{{--                        <td scope="row">{{ $item->created_at }}</td>--}}
+    <div class="row">
+        <div class="col-xl-6">
+            <h5 class="mt-3" style="display: flex;justify-content: space-between"><span>Giao dịch mới</span></h5>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th style="text-align: left">Mã giao dịch</th>
+                    <th class="text-center">Loại</th>
+                    <th class="text-center">Tổng tiền</th>
+                    <th class="text-center">Tin</th>
+                    <th class="text-center">Ngày tạo</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($paymentHistory ?? [] as $item)
+                    <tr style="text-align: center">
+                        <td style="text-align: left" scope="row">{{ $item->id }}</td>
+                        <td>
+                            @if ($item->type == 1)
+                                <span>Tin tường</span>
+                            @elseif($item->type == 2)
+                                <span>Vip 3</span>
+                            @elseif($item->type == 3)
+                                <span>Vip 2</span>
+                            @elseif($item->type == 4)
+                                <span>Vip 1</span>
+                            @else
+                                <span>Đặc biệt</span>
+                            @endif
+                            <span>{{ $item->type }}</span>
+                        </td>
+                        <td scope="row"><span class="text-danger text-bold">{{ number_format($item->money,0,',','.') }}đ</span></td>
+                        <td scope="row">
+                            <a href="">{{ $item->room_id }}</a>
+                        </td>
+                        <td scope="">
+                            {{ $item->created_at }}
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xl-6">
+            <h5 class="mt-3" style="display: flex;justify-content: space-between"><span>Thành viên mới</span></h5>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Avatar</th>
+                    <th>Thông tin</th>
+                    <th>Phone</th>
+                    <th>Ngày tạo</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($users ?? [] as $item)
+                    <tr>
+                        <td scope="row">{{ $item->id }}</td>
+                        <td scope="row">
+                            <img src="{{ pare_url_file($item->avatar) }}" style="width: 60px;height: 60px;border-radius: 50%" alt="">
+                        </td>
+                        <td scope="row">{{ $item->name }} <br>{{ $item->email }}</td>
+                        <td scope="row">{{ $item->phone }}</td>
+                        <td scope="row">{{ $item->created_at }}</td>
 
-{{--                    </tr>--}}
-{{--                @endforeach--}}
-{{--                </tbody>--}}
-{{--            </table>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 @stop

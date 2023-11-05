@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\CheckLoginAdmin;
 use App\Http\Middleware\CheckLoginUser;
+use App\Http\Middleware\PermissionMiddlewareCustomer;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -67,5 +68,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'checkLoginUser' => CheckLoginUser::class,
         'checkLoginAdmin' => CheckLoginAdmin::class,
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        'permission' => PermissionMiddlewareCustomer::class,
+        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
     ];
 }

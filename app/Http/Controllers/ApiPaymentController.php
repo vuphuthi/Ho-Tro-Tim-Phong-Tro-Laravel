@@ -17,27 +17,27 @@ class ApiPaymentController extends Controller
             $vnp_TmnCode    = "Q2KB8XR2"; //Website ID in VNPAY System
             $vnp_HashSecret = "VICWBIDMSXXFAOSSKCHRRLYRZWKENRYG"; //Secret key
 
-            $gateway = Omnipay::create('VNPay');
-            $gateway->initialize([
-                'vnp_TmnCode' => 'Q2KB8XR2',
-                'vnp_HashSecret' => 'VICWBIDMSXXFAOSSKCHRRLYRZWKENRYG',
-            ]);
+            // $gateway = Omnipay::create('VNPay');
+            // $gateway->initialize([
+            //     'vnp_TmnCode' => 'Q2KB8XR2',
+            //     'vnp_HashSecret' => 'VICWBIDMSXXFAOSSKCHRRLYRZWKENRYG',
+            // ]);
 
-            $response = $gateway->purchase([
-                'vnp_TxnRef' => time(),
-                'vnp_OrderType' => 100000,
-                'vnp_OrderInfo' => time(),
-                'vnp_IpAddr' => '127.0.0.1',
-                'vnp_Amount' => 1000000,
-                'vnp_ReturnUrl' => 'https://github.com/phpviet',
-            ])->send();
+            // $response = $gateway->purchase([
+            //     'vnp_TxnRef' => time(),
+            //     'vnp_OrderType' => 100000,
+            //     'vnp_OrderInfo' => time(),
+            //     'vnp_IpAddr' => '127.0.0.1',
+            //     'vnp_Amount' => 1000000,
+            //     'vnp_ReturnUrl' => 'https://github.com/phpviet',
+            // ])->send();
 
-            Log::info("================== :response: ". json_encode($response));
-            if ($response->isRedirect()) {
-                $redirectUrl = $response->getRedirectUrl();
-                return  redirect()->to($redirectUrl);
-                // TODO: chuyển khách sang trang VNPay để thanh toán
-            }
+            // Log::info("================== :response: ". json_encode($response));
+            // if ($response->isRedirect()) {
+            //     $redirectUrl = $response->getRedirectUrl();
+            //     return  redirect()->to($redirectUrl);
+            //     // TODO: chuyển khách sang trang VNPay để thanh toán
+            // }
 
             $vnp_TxnRef       = "12121212121";
             $vnp_OrderInfo    = 'Nạp tiền';
@@ -108,7 +108,7 @@ class ApiPaymentController extends Controller
                 $vnpSecureHash               = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
                 $inputData["vnp_SecureHash"] = $vnpSecureHash;
             }
-
+            return $inputData;
             $response = VnPayService::getClient()->request(VnPayService::POST, 'merchant_webapi/api/transaction', [
                 "json" => $inputData
             ]);

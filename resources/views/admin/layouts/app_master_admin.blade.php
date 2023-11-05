@@ -93,28 +93,40 @@
                         <a class="nav-link active" aria-current="page" href="{{ route('get_admin.home.index') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('get_admin.location.index') }}">Location</a>
+                        <a class="nav-link {{ \Request::route()->getName() == 'get_admin.location.index' ? 'active' : '' }}" href="{{ route('get_admin.location.index') }}">Location</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('get_admin.category.index') }}" title="Category">Category</a>
+                        <a class="nav-link {{ \Request::route()->getName() == 'get_admin.category.index' ? 'active' : '' }}" href="{{ route('get_admin.category.index') }}" title="Category">Category</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('get_admin.user.index') }}" title="Category">User</a>
+                        <a class="nav-link {{ \Request::route()->getName() == 'get_admin.user.index' ? 'active' : '' }}" href="{{ route('get_admin.user.index') }}" title="Category">User</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('get_admin.room.index') }}" title="Category">Room</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('get_admin.recharge.index') }}" title="Category">Recharge</a>
+                        <a class="nav-link {{ \Request::route()->getName() == 'get_admin.room.index' ? 'active' : '' }}" href="{{ route('get_admin.room.index') }}" title="Category">Room</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('get_admin.recharge_pay.index') }}" title="Category">Pay</a>
+                        <a class="nav-link {{ \Request::route()->getName() == 'get_admin.recharge.index' ? 'active' : '' }}" href="{{ route('get_admin.recharge.index') }}" title="Category">Recharge</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('get_admin.article.index') }}" title="Article">Article</a>
+                        <a class="nav-link {{ \Request::route()->getName() == 'get_admin.recharge_pay.index' ? 'active' : '' }}" href="{{ route('get_admin.recharge_pay.index') }}" title="Category">Pay</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ \Request::route()->getName() == 'get_admin.article.index' ? 'active' : '' }}" href="{{ route('get_admin.article.index') }}" title="Article">Article</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ \Request::route()->getName() == 'get_admin.permission.index' ? 'active' : '' }}" href="{{ route('get_admin.permission.index') }}" title="Article">Permission</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ \Request::route()->getName() == 'get_admin.role.index' ? 'active' : '' }}" href="{{ route('get_admin.role.index') }}" title="Article">Role</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ \Request::route()->getName() == 'get_admin.account.index' ? 'active' : '' }}" href="{{ route('get_admin.account.index') }}" title="Article">Account</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">

@@ -18,7 +18,7 @@ class AdminLocationController extends Controller
         if ($request->n)
             $locations->where('name', 'like', '%' . $request->n . '%');
 
-        $locations = $locations->orderByDesc('id')->paginate(10);
+        $locations = $locations->orderByDesc('id')->paginate(40);
 
         $viewData = [
             'locations' => $locations,

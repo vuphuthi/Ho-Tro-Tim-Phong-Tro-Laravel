@@ -7,31 +7,31 @@
  */
 
 
-Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'checkLoginAdmin'], function (){
-    Route::get('','AdminDashboardController@index')->name('get_admin.home.index');
+Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => ['checkLoginAdmin']], function (){
+    Route::get('','AdminDashboardController@index')->name('get_admin.home.index')->middleware('permission:full|get_admin.index');
 
     Route::group(['prefix' => 'location'], function () {
-        Route::get('','AdminLocationController@index')->name('get_admin.location.index');
-        Route::get('create','AdminLocationController@create')->name('get_admin.location.create');
+        Route::get('','AdminLocationController@index')->name('get_admin.location.index')->middleware('permission:full|get_admin.location.index');
+        Route::get('create','AdminLocationController@create')->name('get_admin.location.create')->middleware('permission:full|get_admin.location.create');
         Route::post('create','AdminLocationController@store');
 
-        Route::get('update/{id}','AdminLocationController@edit')->name('get_admin.location.update');
+        Route::get('update/{id}','AdminLocationController@edit')->name('get_admin.location.update')->middleware('permission:full|get_admin.location.update');
         Route::post('update/{id}','AdminLocationController@update');
 
-        Route::get('delete/{id}','AdminLocationController@delete')->name('get_admin.location.delete');
+        Route::get('delete/{id}','AdminLocationController@delete')->name('get_admin.location.delete')->middleware('permission:full|get_admin.location.delete');
     });
 
 
 
     Route::group(['prefix' => 'category'], function () {
-        Route::get('','AdminCategoryController@index')->name('get_admin.category.index');
-        Route::get('create','AdminCategoryController@create')->name('get_admin.category.create');
+        Route::get('','AdminCategoryController@index')->name('get_admin.category.index')->middleware('permission:full|get_admin.category.index');
+        Route::get('create','AdminCategoryController@create')->name('get_admin.category.create')->middleware('permission:full|get_admin.category.create');
         Route::post('create','AdminCategoryController@store');
 
-        Route::get('update/{id}','AdminCategoryController@edit')->name('get_admin.category.update');
+        Route::get('update/{id}','AdminCategoryController@edit')->name('get_admin.category.update')->middleware('permission:full|get_admin.category.update');
         Route::post('update/{id}','AdminCategoryController@update');
 
-        Route::get('delete/{id}','AdminCategoryController@delete')->name('get_admin.category.delete');
+        Route::get('delete/{id}','AdminCategoryController@delete')->name('get_admin.category.delete')->middleware('permission:full|get_admin.category.delete');
     });
 
     Route::group(['prefix' => 'article'], function () {
@@ -78,5 +78,38 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'checkL
         Route::post('update/{id}','AdminRoomController@update');
 
         Route::get('delete/{id}','AdminRoomController@delete')->name('get_admin.room.delete');
+    });
+
+    Route::group(['prefix' => 'permission'], function () {
+        Route::get('','AdminPermissionController@index')->name('get_admin.permission.index');
+        Route::get('create','AdminPermissionController@create')->name('get_admin.permission.create');
+        Route::post('create','AdminPermissionController@store');
+
+        Route::get('update/{id}','AdminPermissionController@edit')->name('get_admin.permission.update');
+        Route::post('update/{id}','AdminPermissionController@update');
+
+        Route::get('delete/{id}','AdminPermissionController@delete')->name('get_admin.permission.delete');
+    });
+
+    Route::group(['prefix' => 'role'], function () {
+        Route::get('','AdminRoleController@index')->name('get_admin.role.index');
+        Route::get('create','AdminRoleController@create')->name('get_admin.role.create');
+        Route::post('create','AdminRoleController@store');
+
+        Route::get('update/{id}','AdminRoleController@edit')->name('get_admin.role.update');
+        Route::post('update/{id}','AdminRoleController@update');
+
+        Route::get('delete/{id}','AdminRoleController@delete')->name('get_admin.role.delete');
+    });
+
+    Route::group(['prefix' => 'account'], function () {
+        Route::get('','AdminAccountController@index')->name('get_admin.account.index');
+        Route::get('create','AdminAccountController@create')->name('get_admin.account.create');
+        Route::post('create','AdminAccountController@store');
+
+        Route::get('update/{id}','AdminAccountController@edit')->name('get_admin.account.update');
+        Route::post('update/{id}','AdminAccountController@update');
+
+        Route::get('delete/{id}','AdminAccountController@delete')->name('get_admin.account.delete');
     });
 });
