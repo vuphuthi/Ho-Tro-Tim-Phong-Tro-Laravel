@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminRequestCategory;
 use App\Models\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -37,7 +38,7 @@ class AdminCategoryController extends Controller
         return view('admin.pages.category.create', $viewData);
     }
 
-    public function store(Request $request)
+    public function store(AdminRequestCategory $request)
     {
         try {
             $data               = $request->except('_token');
@@ -62,7 +63,7 @@ class AdminCategoryController extends Controller
         return view('admin.pages.category.update', $viewData);
     }
 
-    public function update($id, Request $request)
+    public function update($id, AdminRequestCategory $request)
     {
         try {
             $data               = $request->except('_token');
