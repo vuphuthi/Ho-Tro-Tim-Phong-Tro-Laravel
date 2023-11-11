@@ -45,9 +45,17 @@ class AdminAccountController extends Controller
     public function store(Request $request)
     {
         try {
-            $data               = $request->except('_token', 'roles');
+            $data               = $request->except('_token', 'roles','avatar');
             $data['created_at'] = Carbon::now();
             $data['password']   = bcrypt($request->password);
+
+            if ($request->avatar) {
+                $file = upload_image('avatar');
+                if (isset($file) && $file['code'] == 1) {
+                    $data['avatar'] = $file['name'];
+                }
+            }
+
             $account            = Admin::create($data);
             if ($account && $request->roles)
                 $account->assignRole($request->roles);
@@ -83,6 +91,13 @@ class AdminAccountController extends Controller
 
             if ($request->password)
                 $data['password'] = bcrypt($request->password);
+
+            if ($request->avatar) {
+                $file = upload_image('avatar');
+                if (isset($file) && $file['code'] == 1) {
+                    $data['avatar'] = $file['name'];
+                }
+            }
 
             Admin::find($id)->update($data);
             $account = Admin::find($id);

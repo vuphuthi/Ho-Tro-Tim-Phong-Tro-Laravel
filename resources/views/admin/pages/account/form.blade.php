@@ -1,4 +1,4 @@
-<form class="form" method="POST">
+<form class="form" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="mb-3">
         <label class="form-label">Tên </label>
@@ -19,6 +19,15 @@
         <label class="form-label">Password </label>
         <input type="password" class="form-control" name="password" value=""
                aria-describedby="emailHelp" placeholder="******">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Avatar</label>
+        <input type="file" name="avatar">
+    </div>
+    <div class="mb-3">
+        @if (isset($admin->avatar))
+            <img style="width: 100px;height: auto;" src="{{ pare_url_file($admin->avatar ?? "") }}" alt="">
+        @endif
     </div>
 
     <div class="row" style="margin-bottom: 10px;">
