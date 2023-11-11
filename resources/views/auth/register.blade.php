@@ -18,7 +18,10 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" required placeholder="" name="email">
+                    <input type="email" class="form-control"  placeholder="" name="email">
+                    @if($errors->first('email'))
+                        <p class="text-danger">{{ $errors->first('email') }}</p>
+                    @endif
                 </div>
                 <div class="form-group">
                     <label for="phone">Số điện thoại</label>
@@ -27,6 +30,9 @@
                 <div class="form-group">
                     <label for="password">Tạo mật khẩu</label>
                     <input type="password" class="form-control" required placeholder="" name="password">
+                    @if($errors->first('password'))
+                        <p class="text-danger">{{ $errors->first('password') }}</p>
+                    @endif
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-blue btn-submit">Tạo tài khoản</button>
