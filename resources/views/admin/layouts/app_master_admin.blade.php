@@ -132,7 +132,7 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown js-drop-menu">
                         <a class="nav-link dropdown-toggle" href="#" id="menuAccount" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="{{ pare_url_file(get_data_user('admins','avatar')) }}" width="40" height="40" class="rounded-circle">
+                            <img src="{{ pare_url_file(get_data_user('admins','avatar')) }}" width="40" height="40" class="rounded-circle"> {{ get_data_user('admins','name') }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="menuAccount">
                             <a class="dropdown-item" href="{{ route('get_admin.logout') }}" title="Logout">Đăng xuất</a>

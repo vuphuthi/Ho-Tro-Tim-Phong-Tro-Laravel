@@ -166,6 +166,10 @@ return [
         'admin',
         'home',
         'location',
-        'category'
+        'category',
+        'article',
+        'recharge',
+        'user',
+        'room',
     ]
 ];
