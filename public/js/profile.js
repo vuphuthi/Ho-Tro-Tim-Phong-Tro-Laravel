@@ -11,6 +11,14 @@
 var MobilePenel = {
   init: function init() {
     this.toggleMobilePanel();
+    this.initToKen();
+  },
+  initToKen: function initToKen() {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
   },
   toggleMobilePanel: function toggleMobilePanel() {
     var $body = $('body'),
@@ -11526,9 +11534,15 @@ var Auth = {
       if ($phoneNew.length !== 10) {
         toastr__WEBPACK_IMPORTED_MODULE_1___default().error('Số điện thoại không hợp lệ', 'Thất bại');
         return;
-      }
+      } //URL_SEND_CODE_PHONE
 
-      toastr__WEBPACK_IMPORTED_MODULE_1___default().success('Mã code đã gủi tới số điện thoại hoạc email của bạn!', 'Thành công');
+
+      $.ajax({
+        method: "POST",
+        url: URL_SEND_CODE_PHONE
+      }).done(function (msg) {
+        toastr__WEBPACK_IMPORTED_MODULE_1___default().success('Mã code đã gủi tới số điện thoại hoạc email của bạn!', 'Thành công');
+      });
       return;
     });
   }

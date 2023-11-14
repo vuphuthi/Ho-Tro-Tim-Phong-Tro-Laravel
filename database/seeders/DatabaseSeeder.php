@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
     {
         try {
             Admin::create([
-                'name'       => 'Admin',
-                'email'      => 'doantotnghiep@gmail.com',
-                'phone'      => '0909888222',
+                'name'       => 'Admin2',
+                'email'      => 'doantotnghiep2@gmail.com',
+                'phone'      => '0909888223',
                 'password'   => bcrypt('123456789'),
                 'created_at' => Carbon::now()
             ]);

@@ -11,6 +11,14 @@
 var MobilePenel = {
   init: function init() {
     this.toggleMobilePanel();
+    this.initToKen();
+  },
+  initToKen: function initToKen() {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
   },
   toggleMobilePanel: function toggleMobilePanel() {
     var $body = $('body'),

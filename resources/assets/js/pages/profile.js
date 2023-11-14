@@ -8,6 +8,7 @@ var Auth = {
     {
         $(".js-get-code-phone").click( function (event){
             event.preventDefault();
+
             toastr.options = {
                 "closeButton": false,
                 "debug": false,
@@ -33,7 +34,14 @@ var Auth = {
                 return;
             }
 
-            toastr.success('Mã code đã gủi tới số điện thoại hoạc email của bạn!', 'Thành công');
+            //URL_SEND_CODE_PHONE
+            $.ajax({
+                method: "POST",
+                url: URL_SEND_CODE_PHONE,
+            })
+            .done(function( msg ) {
+                toastr.success('Mã code đã gủi tới số điện thoại hoạc email của bạn!', 'Thành công');
+            });
             return;
         })
     },

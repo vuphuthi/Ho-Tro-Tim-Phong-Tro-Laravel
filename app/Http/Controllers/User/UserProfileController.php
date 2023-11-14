@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserUpdatePhoneRequest;
+use App\Jobs\JobSendEmailCodeChangePhone;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -46,16 +47,29 @@ class UserProfileController extends Controller
 
     public function processUpdatePhone(UserUpdatePhoneRequest $request)
     {
+        $user = User::find(\Auth::user()->id);
+        if($request->code != $user->code) {
+            return redirect()->back()->with(['error' => 'Mã OTP không đúng']);
+        }
 
+        $user->phone = $request->phone_new;
+        $user->code = null;
+        $user->save();
+
+        return redirect()->back()->with(['success' => 'Cập nhật thành công']);
     }
 
     public function sendCode(Request $request)
     {
-        $user = User::find(\Auth::user()->id);
-        if (!$user) return abort(404);
+        if ($request->ajax()){
+            $user = User::find(\Auth::user()->id);
+            if (!$user) return abort(404);
+            $code = generateRandomString(10);
+            $user->code = $code;
+            $user->save();
 
-        // lấy user cập nhật
-        // check gen code
-        // 3 Xử lý check code và update phone
+            $emailJob = new JobSendEmailCodeChangePhone($user);
+            dispatch($emailJob);
+        }
     }
 }
