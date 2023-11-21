@@ -39,6 +39,15 @@
             </div>
         </div>
     </div>
+    <div class="row" style="margin-bottom: 15px;">
+        <div class="col-sm-12">
+            <figure class="highcharts-figure">
+                <div id="container2" data-list-day="{{ $listDay }}"
+                     data-money-default={{ $arrRevenueTransactionMonth }} data-money={{ $arrRevenueTransactionMonth }}>
+                </div>
+            </figure>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xl-6">
             <h5 class="mt-3" style="display: flex;justify-content: space-between"><span>Giao dịch mới</span></h5>
@@ -111,4 +120,72 @@
             </table>
         </div>
     </div>
+@stop
+@section('script')
+    <link rel="stylesheet" href="https://code.highcharts.com/css/highcharts.css">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script type="text/javascript">
+
+        let listday = $("#container2").attr("data-list-day");
+        listday = JSON.parse(listday);
+
+        let listMoneyMonth = $("#container2").attr('data-money');
+        listMoneyMonth = JSON.parse(listMoneyMonth);
+
+        let listMoneyMonthDefault = $("#container2").attr('data-money-default');
+        listMoneyMonthDefault = JSON.parse(listMoneyMonthDefault);
+
+        Highcharts.chart('container2', {
+            chart: {
+                type: 'spline'
+            },
+            title: {
+                text: 'Biểu đồ doanh thu các ngày trong tháng'
+            },
+            xAxis: {
+                categories: listday
+            },
+            yAxis: {
+                title: {
+                    text: 'Biển đồ giá trị'
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value + '°';
+                    }
+                }
+            },
+            tooltip: {
+                crosshairs: true,
+                shared: true
+            },
+            plotOptions: {
+                spline: {
+                    marker: {
+                        radius: 4,
+                        lineColor: '#666666',
+                        lineWidth: 1
+                    }
+                }
+            },
+            series: [
+                {
+                    name: 'Hoàn tất giao dịch',
+                    marker: {
+                        symbol: 'square'
+                    },
+                    data: listMoneyMonth
+                },
+                {
+                    name: 'Tiếp nhận',
+                    marker: {
+                        symbol: 'square'
+                    },
+                    data: listMoneyMonthDefault
+                }
+            ]
+        });
+        $("body .highcharts-credits").remove();
+    </script>
 @stop

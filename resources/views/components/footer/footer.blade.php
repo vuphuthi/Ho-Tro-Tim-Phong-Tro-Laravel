@@ -69,20 +69,7 @@
             </div>
         </div>
         <div class="footer-company">
-            <p class="company_name"><strong>CÔNG TY TNHH LBKCORP</strong></p>
-            <p class="fz-13"><strong>Tổng đài CSKH: 0917.686.101</strong></p>
-            <p class="fz-13">Copyright © 2015 - 2021 Phongtro123.com</p>
-            <p class="fz-13">Email: cskh.phongtro123@gmail.com | lienhe.phongtro123@gmail.com</p>
-            <p class="fz-13">Địa chỉ: LE-4.07, Toà nhà Lexington Residence, Số 67 Mai Chí Thọ, Phường An Phú, Quận 2, Tp. Hồ Chí Minh.</p>
-            <p class="fz-13">Giấy phép đăng ký kinh doanh số 0313588502 do Sở kế hoạch và Đầu tư thành phố Hồ Chí Minh cấp ngày 24 tháng 12 năm 2015.</p>
-            <div class="certificate">
-                <a class="icon-dkbct" style="" rel="nofollow" target="_blank" href="#">
-                    <img src="{{ url('images/dkbct.jpg') }}" alt="">
-                </a>
-                <a  class="dmca-badge" rel="nofollow" style="display: inline-block; margin: 0 5px;" target="_blank" href="#">
-                    <img src="{{ url('images/dmca-badge-w200-2x1-04.jpg') }}" alt="">
-                </a>
-            </div>
+            <p class="company_name"><strong>FPT POLYTECHNIC</strong></p>
         </div>
     </div>
 </footer>

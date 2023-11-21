@@ -11,7 +11,8 @@
                     <a href="">{{ number_format(get_data_user('web','account_balance'),0,',','.') }} đ</a>
                 </div>
                 <a href="{{ route('get_user.recharge.history') }}" class="text-bold text-success">Lịch sử nạp tiền</a>  <a href=""> \ </a>
-                <a href="{{ route('get_user.payment.history') }}" class="text-bold text-danger">Lịch sử thanh toán</a>
+                <a href="{{ route('get_user.payment.history') }}" class="text-bold text-danger">Lịch sử thanh toán &nbsp;</a>
+                <a href="{{ route('get_user.room.index') }}" class="text-bold text-danger"> - QL Phòng</a>
                 <a rel="nofollow" class="btn btn-pink btn-add-post" href="{{ route('get_user.room.create') }}">
                     Đăng tin mới
                     <i class="la la-plus-circle" aria-hidden="true"></i>

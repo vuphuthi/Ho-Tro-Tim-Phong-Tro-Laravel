@@ -15,7 +15,6 @@ class PermissionMiddlewareCustomer
 {
     public function handle($request, Closure $next, $permission, $guard = 'admins')
     {
-//        return $next($request);
         $authGuard = app('auth')->guard($guard);
 
         if ($authGuard->guest()) {
