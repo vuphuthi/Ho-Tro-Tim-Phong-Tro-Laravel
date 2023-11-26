@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" required placeholder="" name="email" value="{{ $user->email }}">
+                    <input type="email" class="form-control" disabled placeholder="" name="email" value="{{ $user->email }}">
                 </div>
                 <div class="row-lists">
                     <div class="form-group w-100">

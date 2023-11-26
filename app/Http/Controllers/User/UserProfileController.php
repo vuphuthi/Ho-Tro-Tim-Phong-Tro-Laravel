@@ -23,7 +23,6 @@ class UserProfileController extends Controller
         $user = User::find(\Auth::user()->id);
         if (!$user) return abort(404);
         $user->name = $request->name;
-        $user->email = $request->email;
 
         if ($request->avatar) {
             $file = upload_image('avatar');

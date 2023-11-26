@@ -15,8 +15,11 @@ class AdminRechargeController extends Controller
 {
     public function index()
     {
-        $rechargeHistory = RechargeHistory::with('user:id,name')->orderByDesc('id')->paginate(20);
-        $viewData        = [
+        $rechargeHistory = RechargeHistory::with('user:id,name');
+
+
+        $rechargeHistory = $rechargeHistory->orderByDesc('id')->paginate(20);
+        $viewData = [
             'rechargeHistory' => $rechargeHistory
         ];
 
@@ -25,11 +28,22 @@ class AdminRechargeController extends Controller
 
     public function indexPay(Request $request)
     {
-        $paymentHistory = PaymentHistory::with('user:id,name')
+        $paymentHistory = PaymentHistory::with('user:id,name');
+        if ($request->t) {
+            $paymentHistory->whereDate('created_at', '=', $request->t);
+        }
+        if ($request->u) {
+            $paymentHistory->where('user_id', $request->u);
+        }
+
+        $paymentHistory = $paymentHistory
             ->orderByDesc('id')->paginate(20);
 
+        $users = User::all();
         $viewData = [
-            'paymentHistory' => $paymentHistory
+            'paymentHistory' => $paymentHistory,
+            'query'          => $request->query(),
+            'users'          => $users
         ];
 
         return view('admin.pages.recharge.pay', $viewData);
@@ -37,7 +51,7 @@ class AdminRechargeController extends Controller
 
     public function create()
     {
-        $users          = User::all();
+        $users = User::all();
         $rechargeConfig = config('payment.method');
 
         $viewData = [
@@ -52,17 +66,17 @@ class AdminRechargeController extends Controller
     {
         try {
             DB::beginTransaction();
-            $data                = $request->except('_token');
-            $data['created_at']  = Carbon::now();
+            $data = $request->except('_token');
+            $data['created_at'] = Carbon::now();
             $data['total_money'] = $data['money'] + $data['discount'];
-            $data['code']        = generateRandomString(15) . $data['user_id'];
-            $rechargeHistory     = RechargeHistory::create($data);
+            $data['code'] = generateRandomString(15) . $data['user_id'];
+            $rechargeHistory = RechargeHistory::create($data);
             if ($rechargeHistory) {
                 if ($rechargeHistory->status == RechargeHistory::STATUS_SUCCESS) {
                     // tiến hành cộng tiền cho người dùng
                     $user = User::find($rechargeHistory->user_id);
                     if (!$user) {
-                        $rechargeHistory->note   = 'User không hợp lệ';
+                        $rechargeHistory->note = 'User không hợp lệ';
                         $rechargeHistory->status = RechargeHistory::STATUS_CANCEL;
                         $rechargeHistory->save();
                     } else {
@@ -89,7 +103,7 @@ class AdminRechargeController extends Controller
             return redirect()->back();
         }
 
-        $rechargeConfig  = config('payment.method');
+        $rechargeConfig = config('payment.method');
 
         $viewData = [
             'rechargeHistory' => $rechargeHistory,
@@ -99,7 +113,8 @@ class AdminRechargeController extends Controller
         return view('admin.pages.recharge.update', $viewData);
     }
 
-    public function update($id, Request $request) {
+    public function update($id, Request $request)
+    {
         try {
             DB::beginTransaction();
             $rechargeHistory = RechargeHistory::find($id);
@@ -113,7 +128,7 @@ class AdminRechargeController extends Controller
                     // tiến hành cộng tiền cho người dùng
                     $user = User::find($rechargeHistory->user_id);
                     if (!$user) {
-                        $rechargeHistory->note   = 'User không hợp lệ';
+                        $rechargeHistory->note = 'User không hợp lệ';
                         $rechargeHistory->status = RechargeHistory::STATUS_CANCEL;
                         $rechargeHistory->save();
                     } else {

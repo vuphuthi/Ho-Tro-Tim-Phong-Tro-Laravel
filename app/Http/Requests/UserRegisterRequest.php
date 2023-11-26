@@ -24,17 +24,21 @@ class UserRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'email'    => 'required|unique:users,email',
-            'password' => 'required'
+            'email'                 => 'required|unique:users,email',
+            'password'              => 'required|confirmed|min:6',
+            'password_confirmation' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'email.required'    => 'Email không được để trống',
-            'email.unique'      => 'Email đã tồn tại',
-            'password.required' => 'Mật khẩu không được để trống',
+            'email.required'                 => 'Email không được để trống',
+            'email.unique'                   => 'Email đã tồn tại',
+            'password_confirmation.required' => 'Mật khẩu xác nhận không được để trống',
+            'password.required'              => 'Mật khẩu không được để trống',
+            'password.confirmed'             => 'Mật khẩu xác nhận không khớp',
+            'password.min'                   => 'Mật khẩu ít nhất 6 ký tự',
         ];
     }
 }

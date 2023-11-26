@@ -93,7 +93,7 @@ class UserRechargeController extends Controller
         $vnp_TmnCode = "Q2KB8XR2"; //Website ID in VNPAY System
         $vnp_HashSecret = "VICWBIDMSXXFAOSSKCHRRLYRZWKENRYG"; //Secret key
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = "http://seri-phongtro.abc:8888/user/nap-tien/post-back-atm-internet-banking";
+        $vnp_Returnurl = "http://2023-seri-timphongtro.abc:8888/user/nap-tien/post-back-atm-internet-banking";
         $vnp_apiUrl = "http://sandbox.vnpayment.vn/merchant_webapi/merchant.html";
 
         $startTime = date("YmdHis");
@@ -103,10 +103,9 @@ class UserRechargeController extends Controller
         $vnp_OrderInfo = 'Nạp tiền';
         $vnp_OrderType = 'other';
         $vnp_Amount = $rechargeHistory->total_money * 100;
-        $vnp_Locale = 'vn';
-        $vnp_BankCode = 'NCB';
+        $vnp_Locale = $request->language ?? "vn"; //Ngôn ngữ chuyển hướng thanh toán
+        $vnp_BankCode = $request->bankCode ?? "VNBANK"; //Mã phương thức thanh toán
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-//        $vnp_ExpireDate = $_POST['txtexpire'];
         $vnp_Bill_Mobile = get_data_user('web','phone');
         $vnp_Bill_Email = get_data_user('web','email');
         $fullName = get_data_user('web','name');
@@ -152,7 +151,10 @@ class UserRechargeController extends Controller
 
         if (isset($vnp_BankCode) && $vnp_BankCode != "") {
             $inputData['vnp_BankCode'] = $vnp_BankCode;
+        } else {
+            $inputData["vnp_BankCode"] = "VNPAYQR";
         }
+
         if (isset($vnp_Bill_State) && $vnp_Bill_State != "") {
             $inputData['vnp_Bill_State'] = $vnp_Bill_State;
         }

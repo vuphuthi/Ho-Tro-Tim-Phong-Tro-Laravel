@@ -63,6 +63,7 @@ class UserRoomController extends Controller
         }
 
         $data = $this->switchPrice($data);
+        $data = $this->switchArea($data);
 
         $room = Room::create($data);
         if ($room) {

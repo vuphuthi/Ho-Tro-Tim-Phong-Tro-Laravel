@@ -19,6 +19,12 @@ class AdminUserController extends Controller
         if ($request->n)
             $users->where('name', 'like', '%' . $request->n . '%');
 
+        if ($request->p)
+            $users->where('phone', 'like', '%' . $request->p . '%');
+
+        if ($request->e)
+            $users->where('email', 'like', '%' . $request->e . '%');
+
         $users = $users->orderByDesc('id')->paginate(20);
 
         $viewData = [
@@ -42,8 +48,16 @@ class AdminUserController extends Controller
     public function update($id, Request $request)
     {
         try {
-            $data               = $request->except('_token');
+            $data               = $request->except('_token','avatar');
             $data['updated_at'] = Carbon::now();
+
+            if ($request->avatar) {
+                $file = upload_image('avatar');
+                if (isset($file) && $file['code'] == 1) {
+                    $data['avatar'] = $file['name'];
+                }
+            }
+
             User::find($id)->update($data);
 
             return redirect()->route('get_admin.user.index');

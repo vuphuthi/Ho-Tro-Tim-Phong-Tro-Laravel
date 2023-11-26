@@ -18,6 +18,7 @@
                 <th>Tên</th>
                 <th>Phân loại</th>
                 <th>Trạng thái</th>
+                <th>.</th>
                 <th>Nổi bật</th>
                 <th>Ngày tạo</th>
                 <th></th>
@@ -30,6 +31,7 @@
                     <td scope="row">{{ $item->name }}</td>
                     <td scope="row">{{ $item->getType($item->type) }}</td>
                     <td scope="row"><span class="text-success">Active</span></td>
+                    <td scope="row">{{ $item->type_text }}</td>
                     <td scope="row">
                         @if ($item->hot == 1)
                             <span class="text-danger">Hot</span>

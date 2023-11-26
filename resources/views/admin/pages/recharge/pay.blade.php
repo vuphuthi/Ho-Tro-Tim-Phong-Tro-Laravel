@@ -1,6 +1,24 @@
 @extends('admin.layouts.app_master_admin')
 @section('content')
     <h2 class="mt-3" style="display: flex;justify-content: space-between"><span>Lịch sử thanh toán</span> </h2>
+    <div class="">
+        <form action="" class="row">
+            <div class="col-sm-3">
+                <input type="date" value="{{ Request::get('t') }}" name="t" class="form-control">
+            </div>
+            <div class="col-sm-3">
+                <select name="u" class="form-control" id="">
+                    <option value="">Khách hàng</option>
+                    @foreach($users as $item)
+                        <option {{ Request::get('u') == $item->id ? "selected" : "" }} value="{{ $item->id }}">{{ $item->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <button type="submit" class="btn btn-primary">Find</button>
+            </div>
+        </form>
+    </div>
     <table class="table table-hover">
         <thead>
         <tr>

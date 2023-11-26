@@ -44,7 +44,7 @@
                 <label class="search_field_item_label">Phường xã</label>
                 <select name="wards_id" class="form-control" id="wards_id" data-placeholder="Click chọn phường xã">
                     @foreach($wards  ?? [] as $item)
-                        <option value="{{ $item->id }}" {{ $item->id == ($room->wards_id ?? 0) ? "selected" : ""}} >{{ $item->name }}</option>
+                        <option value="{{ $item->id }}" {{ $item->id == ($room->wards_id ?? (Request::get('wards_id'))) ? "selected" : ""}} >{{ $item->name }}</option>
                     @endforeach
                 </select>
             </div>
