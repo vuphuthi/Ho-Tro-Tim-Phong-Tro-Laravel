@@ -40,7 +40,9 @@ class AdminUserController extends Controller
     {
         $user     = User::find($id);
 
-        $rooms      = Room::with('category:id,name,slug','city:id,name,slug','district:id,name,slug','wards:id,name,slug');
+        $rooms      = Room::with('category:id,name,slug','city:id,name,slug','district:id,name,slug','wards:id,name,slug')
+            ->where("auth_id", $id);
+
         if ($request->category_id)
             $rooms->where('category_id', $request->category_id);
 
