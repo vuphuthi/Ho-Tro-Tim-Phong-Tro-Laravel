@@ -12,7 +12,24 @@
             <div class="card-header">
               <h3 class="card-title">Danh sách thanh toán</h3>
 
-              
+              <div class="">
+                <form action="" class="row">
+                    <div class="col-sm-3">
+                        <input type="date" value="{{ Request::get('t') }}" name="t" class="form-control">
+                    </div>
+                    <div class="col-sm-3">
+                        <select name="u" class="form-control" id="">
+                            <option value="">Khách hàng</option>
+                            @foreach($users as $item)
+                                <option {{ Request::get('u') == $item->id ? "selected" : "" }} value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="submit" class="btn btn-primary">Find</button>
+                    </div>
+                </form>
+            </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
