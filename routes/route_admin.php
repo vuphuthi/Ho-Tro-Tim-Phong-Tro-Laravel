@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm .
- * User: trungphuna .
- * Date: 10/26/22 .
- * Time: 12:23 AM .
- */
+
 
 
 Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => ['checkLoginAdmin']], function (){
