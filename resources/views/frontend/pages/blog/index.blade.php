@@ -2,6 +2,7 @@
 @section('title', 'Bài viết')
 @push('css')
     <link href="/css/blog.css" rel="stylesheet">
+    <link href="/css/home.css" rel="stylesheet">
 @endpush
 
 @section('content')

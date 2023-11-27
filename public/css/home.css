@@ -2413,6 +2413,7 @@ i {
 .navbar-menu {
   width: 100%;
   background: #025aac;
+  text-align: center;
 }
 .navbar-menu #menu-main-menu {
   margin: 0 auto;
@@ -2497,7 +2498,7 @@ i {
 .footer .footer-content .footer-nav .footer-col-first .footer-logo {
   width: 220px;
   height: 70px;
-  background: url("/images/logo_70.png") center no-repeat;
+  background: url("/images/logo.png") center no-repeat;
   background-size: contain;
   text-indent: -9999999px;
   display: block;
@@ -2624,7 +2625,7 @@ i {
   margin-top: 20px;
 }
 #searchbar .searchform {
-  background: #ffdc9a;
+  background: #0073ae;
   padding: 15px;
   border-radius: 5px;
 }
@@ -2640,6 +2641,7 @@ i {
   display: block;
   font-size: 12px;
   font-weight: 600;
+  color: #ffffff;
   margin: 0 0 3px;
 }
 #searchbar .searchform .search_field .search_field_item .btn_search_box {

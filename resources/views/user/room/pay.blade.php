@@ -31,7 +31,7 @@
         }
     </style>
     <div class="alert alert-warning" role="alert">
-        <p>Nếu bạn đã từng đăng tin trên Phongtro123.com, hãy sử dụng chức năng ĐẨY TIN / GIA HẠN / NÂNG CẤP VIP trong mục QUẢN LÝ TIN ĐĂNG để làm mới, đẩy tin lên cao thay vì đăng tin mới. Tin đăng trùng nhau sẽ không được duyệt.</p>
+        <p>Nếu bạn đã từng đăng tin trên Beehouse, hãy sử dụng chức năng ĐẨY TIN / GIA HẠN / NÂNG CẤP VIP trong mục QUẢN LÝ TIN ĐĂNG để làm mới, đẩy tin lên cao thay vì đăng tin mới. Tin đăng trùng nhau sẽ không được duyệt.</p>
         <p>Xin cảm ơn!</p>
     </div>
     <form action="" method="POST" autocomplete="off" enctype="multipart/form-data">

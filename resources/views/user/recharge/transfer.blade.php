@@ -34,7 +34,7 @@
         <p><strong>Lưu ý quan trọng:</strong></p>
         <p>- Nội dung chuyển tiền bạn vui lòng ghi đúng thông tin sau:</p><p>
         </p><p><strong style="color: red;">"PT123 - 104768 - 0986420994"</strong></p>
-        <p>Trong đó 104768 là mã thành viên, 0986420994 là số điện thoại của bạn đăng ký trên website phongtro123.com.</p>
+        <p>Trong đó 104768 là mã thành viên, 0986420994 là số điện thoại của bạn đăng ký trên website Beehouse.</p>
         <p>Xin cảm ơn!</p>
     </div>
     <table class="table table-bordered table-striped">

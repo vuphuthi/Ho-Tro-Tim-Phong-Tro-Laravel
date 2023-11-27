@@ -2,7 +2,7 @@
     <div class="inner">
         <div class="user-control">
             <div class="user-info">
-                <p>Chào mừng bạn đến với <strong>Phongtro123.com</strong></p>
+                <p>Chào mừng bạn đến với <strong>Beehouse</strong></p>
                 <a rel="nofollow" class="btn btn-login" href="/login">Đăng nhập</a>
                 <a rel="nofollow" class="btn btn-register" href="/register">Đăng ký</a>
             </div>

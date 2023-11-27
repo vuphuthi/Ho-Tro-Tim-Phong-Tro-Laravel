@@ -2,6 +2,7 @@
 @section('title', 'Trang chủ')
 @push('css')
     <link href="/css/mini_apartment.css" rel="stylesheet">
+    <link href="/css/home.css" rel="stylesheet">
 @endpush
 
 @section('content')

@@ -1,7 +1,7 @@
 <header class="header-default {{ $container ? $container : '' }} container-header">
     <div class="header-area">
         <a class="top-logo" href="{{ route('get.home') }}" title="">
-            <img src="{{ url('images/logo-2021-tet.jpg') }}" alt="">
+            <img src="{{ url('images/logo.png') }}" alt="">
         </a>
         <div class="user-welcome js-reload-html-header">
             @if (isset(Auth::user()->name))

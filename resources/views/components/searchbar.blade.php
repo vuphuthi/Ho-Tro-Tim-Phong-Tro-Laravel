@@ -43,6 +43,7 @@
             <div class="search_field_item search_field_item_duongpho">
                 <label class="search_field_item_label">Phường xã</label>
                 <select name="wards_id" class="form-control" id="wards_id" data-placeholder="Click chọn phường xã">
+                    <option value="">Chọn phường xã</option>
                     @foreach($wards  ?? [] as $item)
                         <option value="{{ $item->id }}" {{ $item->id == ($room->wards_id ?? (Request::get('wards_id'))) ? "selected" : ""}} >{{ $item->name }}</option>
                     @endforeach
@@ -69,7 +70,7 @@
             <div class="search_field_item search_field_item_submit">
                 <label class="search_field_item_label mb-item-label">&nbsp;</label>
                 <div>
-                    <button type="submit" class="btn btn-default btn_search_box form-control"> Lọc tin </button>
+                    <button type="submit" class="btn btn-default btn_search_box form-control"> Tìm kiếm </button>
                 </div>
             </div>
         </div>

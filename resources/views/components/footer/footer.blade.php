@@ -12,7 +12,7 @@
                 <p style="line-height: 1.3;"><strong>300.000+</strong> khách truy cập và <strong>hơn 2 triệu</strong>lượt xem mỗi tháng</p>
             </div>
             <div class="footer-col">
-                <span class="footer-col-title">Về PHONGTRO123.COM</span>
+                <span class="footer-col-title">Về Beehouse</span>
                 <ul class="footer-menu">
                     <li><a href="#">Trang chủ</a></li>
                     <li><a rel="nofollow" href="#">Giới thiệu</a></li>
