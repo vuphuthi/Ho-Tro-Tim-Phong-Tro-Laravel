@@ -89,7 +89,8 @@ class UserRechargeController extends Controller
 
     protected function createPaymentAtm($data)
     {
-        $vnp_Returnurl = "http://2023-seri-timphongtro.abc:8888/user/nap-tien/post-back-atm-internet-banking";
+        $domain = config('app.url');
+        $vnp_Returnurl = $domain. "/user/nap-tien/post-back-atm-internet-banking";
         $curl = curl_init();
 
         curl_setopt_array($curl, array (
@@ -101,7 +102,7 @@ class UserRechargeController extends Controller
             CURLOPT_POSTFIELDS     => http_build_query(array (
                 "order_id"     => $data->code,
                 "url_return"   => $vnp_Returnurl,
-                "amount"       => $data->total_money * 100,
+                "amount"       => $data->total_money,
                 "service_code" => "phongtro",
                 "url_callback" => $vnp_Returnurl
             ))
@@ -114,70 +115,6 @@ class UserRechargeController extends Controller
         }
 
         curl_close($curl);
-        return;
-        date_default_timezone_set('Asia/Ho_Chi_Minh');
-
-        $vnp_TmnCode = "Q2KB8XR2"; //Website ID in VNPAY System
-        $vnp_HashSecret = "VICWBIDMSXXFAOSSKCHRRLYRZWKENRYG"; //Secret key
-        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = "http://2023-seri-timphongtro.abc:8888/user/nap-tien/post-back-atm-internet-banking";
-
-        $startTime = date("YmdHis");
-        $expire = date('YmdHis', strtotime('+15 minutes', strtotime($startTime)));
-
-        $vnp_TxnRef = $rechargeHistory->code;
-        $vnp_OrderInfo = 'Nạp tiền';
-        $vnp_OrderType = 'other';
-        $vnp_Amount = $rechargeHistory->total_money * 100;
-        $vnp_Locale = $request->language ?? "vn"; //Ngôn ngữ chuyển hướng thanh toán
-        $vnp_BankCode = "VNBANK"; //Mã phương thức thanh toán
-//        $vnp_BankCode = $request->bankCode ?? "VNBANK"; //Mã phương thức thanh toán
-        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-
-
-        $inputData = array (
-            "vnp_Version"    => "2.1.0",
-            "vnp_TmnCode"    => $vnp_TmnCode,
-            "vnp_Amount"     => $vnp_Amount,
-            "vnp_Command"    => "pay",
-            "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode"   => "VND",
-            "vnp_IpAddr"     => $vnp_IpAddr,
-            "vnp_Locale"     => $vnp_Locale,
-            "vnp_OrderInfo"  => $vnp_OrderInfo,
-            "vnp_OrderType"  => $vnp_OrderType,
-            "vnp_ReturnUrl"  => $vnp_Returnurl,
-            "vnp_TxnRef"     => $vnp_TxnRef,
-            "vnp_ExpireDate" => $expire
-        );
-
-        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
-            $inputData['vnp_BankCode'] = $vnp_BankCode;
-        } else {
-            $inputData["vnp_BankCode"] = "VNPAYQR";
-        }
-
-        ksort($inputData);
-        $query = "";
-        $i = 0;
-        $hashdata = "";
-        foreach ($inputData as $key => $value) {
-            if ($i == 1) {
-                $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
-            } else {
-                $hashdata .= urlencode($key) . "=" . urlencode($value);
-                $i = 1;
-            }
-            $query .= urlencode($key) . "=" . urlencode($value) . '&';
-        }
-
-        $vnp_Url = $vnp_Url . "?" . $query;
-        if (isset($vnp_HashSecret)) {
-            $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);//
-            $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
-        }
-        header('Location: ' . $vnp_Url);
-        die();
     }
 
     public function postbackAtm(Request $request)
