@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Room;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -33,6 +34,30 @@ class AdminUserController extends Controller
         ];
 
         return view('admin.pages.user.index', $viewData);
+    }
+
+    public function view(Request $request, $id)
+    {
+        $user     = User::find($id);
+
+        $rooms      = Room::with('category:id,name,slug','city:id,name,slug','district:id,name,slug','wards:id,name,slug');
+        if ($request->category_id)
+            $rooms->where('category_id', $request->category_id);
+
+        if ($request->n)
+            $rooms->where('name', 'like', '%' . $request->n . '%');
+
+        $rooms      = $rooms->orderByDesc('id')->paginate(10);
+        $categories = Category::select('id', 'name')->get();
+
+        $viewData   = [
+            'rooms'      => $rooms,
+            'categories' => $categories,
+            'query'      => $request->query(),
+            'user' => $user
+        ];
+
+        return view('admin.pages.user.view', $viewData);
     }
 
     public function edit($id)

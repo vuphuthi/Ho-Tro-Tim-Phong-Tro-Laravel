@@ -1,6 +1,36 @@
 @extends('admin.layouts.app_master_admin')
 @section('content')
     <h2 class="mt-3" style="display: flex;justify-content: space-between"><span>Danh sách nạp tiền</span> <a href="{{ route('get_admin.recharge.create') }}" style="font-size: 16px;">Thêm mới</a></h2>
+    <div class="">
+        <form action="" class="row">
+            <div class="col-sm-2">
+                <input type="date" value="{{ Request::get('t') }}" name="t" class="form-control">
+            </div>
+            <div class="col-sm-2">
+                <input type="text" value="{{ Request::get('code') }}" name="code" placeholder="mã giao dịch"  class="form-control">
+            </div>
+            <div class="col-sm-2">
+                <select name="u" class="form-control" id="">
+                    <option value="">Khách hàng</option>
+                    @foreach($users as $item)
+                        <option {{ Request::get('u') == $item->id ? "selected" : "" }} value="{{ $item->id }}">{{ $item->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <select name="s" class="form-control" id="">
+                    <option value="">Trạng thái</option>
+                    <option value="-1" {{ Request::get('s') == -1 ? "selected" : "" }}>Đã huỷ</option>
+                    <option value="1" {{ Request::get('s') == 1 ? "selected" : "" }}>Khởi tạo</option>
+                    <option value="2" {{ Request::get('s') == 2 ? "selected" : "" }}>Hoàn thành</option>
+                    <option value="-2" {{ Request::get('s') == -2 ? "selected" : "" }}>Lỗi</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <button type="submit" class="btn btn-primary">Find</button>
+            </div>
+        </form>
+    </div>
     <table class="table table-hover">
         <thead>
         <tr>

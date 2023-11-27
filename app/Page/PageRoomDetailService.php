@@ -38,8 +38,10 @@ class PageRoomDetailService
         }
 
         $room = Room::with('category:id,name,slug', 'city:id,name,slug', 'district:id,name,slug', 'wards:id,name,slug')
-            ->whereIn('status', [ROOM::STATUS_ACTIVE, ROOM::STATUS_EXPIRED])
+            ->whereIn('status', [ROOM::STATUS_ACTIVE])
             ->find($id);
+
+//        ROOM::STATUS_EXPIRED
 
         if (!$room) return abort(404);
 

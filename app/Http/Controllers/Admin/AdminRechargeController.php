@@ -13,14 +13,30 @@ use Illuminate\Support\Facades\Log;
 
 class AdminRechargeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $rechargeHistory = RechargeHistory::with('user:id,name');
 
+        if ($request->t) {
+            $rechargeHistory->whereDate('created_at', '=', $request->t);
+        }
+        if ($request->u) {
+            $rechargeHistory->where('user_id', $request->u);
+        }
+        if ($request->s) {
+            $rechargeHistory->where('status', $request->s);
+        }
+
+        if ($request->code) {
+            $rechargeHistory->where('code', $request->code);
+        }
 
         $rechargeHistory = $rechargeHistory->orderByDesc('id')->paginate(20);
+        $users = User::all();
+
         $viewData = [
-            'rechargeHistory' => $rechargeHistory
+            'rechargeHistory' => $rechargeHistory,
+            'users'           => $users
         ];
 
         return view('admin.pages.recharge.index', $viewData);

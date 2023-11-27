@@ -43,6 +43,7 @@
                 <td scope="row">{{ $item->facebook ?? "Chưa cập nhật" }}</td>
                 <td scope="row">{{ $item->created_at }}</td>
                 <td scope="row">
+                    <a href="{{ route('get_admin.user.view', $item->id) }}" class="text-info">View</a>
                     <a href="{{ route('get_admin.user.update', $item->id) }}">Update</a>
                     <a href="{{ route('get_admin.user.delete', $item->id) }}" class="text-danger">Delete</a>
                 </td>
