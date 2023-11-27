@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RequestAtm;
 use App\Models\PaymentHistory;
 use App\Models\RechargeHistory;
 use App\Models\User;
@@ -67,17 +68,17 @@ class UserRechargeController extends Controller
         return view('user.recharge.atm_internet');
     }
 
-    public function processAtmInternet(Request $request)
+    public function processAtmInternet(RequestAtm $request)
     {
         try {
-            $data                = $request->except('_token');
-            $data['created_at']  = Carbon::now();
-            $data['money']       = $request->price;
-            $data['user_id']     = get_data_user('web');
+            $data = $request->except('_token');
+            $data['created_at'] = Carbon::now();
+            $data['money'] = $request->price;
+            $data['user_id'] = get_data_user('web');
             $data['total_money'] = $data['money'];
-            $data['type']        = 3;
-            $data['code']        = generateRandomString(15) . $data['user_id'];
-            $rechargeHistory     = RechargeHistory::create($data);
+            $data['type'] = 3;
+            $data['code'] = generateRandomString(15) . $data['user_id'];
+            $rechargeHistory = RechargeHistory::create($data);
             $this->createPaymentAtm($rechargeHistory);
         } catch (\Exception $exception) {
             Log::error("---------------------  " . $exception->getMessage());
@@ -86,75 +87,74 @@ class UserRechargeController extends Controller
         return redirect()->back();
     }
 
-    protected function createPaymentAtm($rechargeHistory)
+    protected function createPaymentAtm($data)
     {
+        $vnp_Returnurl = "http://2023-seri-timphongtro.abc:8888/user/nap-tien/post-back-atm-internet-banking";
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array (
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL            => 'https://123code.net/api/v1/payment/add',
+            CURLOPT_USERAGENT      => 'phongtro',
+            CURLOPT_POST           => 1,
+            CURLOPT_SSL_VERIFYPEER => false, //Bỏ kiểm SSL
+            CURLOPT_POSTFIELDS     => http_build_query(array (
+                "order_id"     => $data->code,
+                "url_return"   => $vnp_Returnurl,
+                "amount"       => $data->total_money * 100,
+                "service_code" => "phongtro",
+                "url_callback" => $vnp_Returnurl
+            ))
+        ));
+        $resp = json_decode(curl_exec($curl), true);
+
+        if (isset($resp["link"])) {
+            var_dump($resp["link"]);
+            header('location:' . $resp['link']);exit();
+        }
+
+        curl_close($curl);
+        return;
         date_default_timezone_set('Asia/Ho_Chi_Minh');
 
         $vnp_TmnCode = "Q2KB8XR2"; //Website ID in VNPAY System
         $vnp_HashSecret = "VICWBIDMSXXFAOSSKCHRRLYRZWKENRYG"; //Secret key
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = "http://seri-phongtro.abc:8888/user/nap-tien/post-back-atm-internet-banking";
-        $vnp_apiUrl = "http://sandbox.vnpayment.vn/merchant_webapi/merchant.html";
+        $vnp_Returnurl = "http://2023-seri-timphongtro.abc:8888/user/nap-tien/post-back-atm-internet-banking";
 
         $startTime = date("YmdHis");
-        $expire = date('YmdHis',strtotime('+15 minutes',strtotime($startTime)));
+        $expire = date('YmdHis', strtotime('+15 minutes', strtotime($startTime)));
 
         $vnp_TxnRef = $rechargeHistory->code;
         $vnp_OrderInfo = 'Nạp tiền';
         $vnp_OrderType = 'other';
         $vnp_Amount = $rechargeHistory->total_money * 100;
-        $vnp_Locale = 'vn';
-        $vnp_BankCode = 'NCB';
+        $vnp_Locale = $request->language ?? "vn"; //Ngôn ngữ chuyển hướng thanh toán
+        $vnp_BankCode = "VNBANK"; //Mã phương thức thanh toán
+//        $vnp_BankCode = $request->bankCode ?? "VNBANK"; //Mã phương thức thanh toán
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-//        $vnp_ExpireDate = $_POST['txtexpire'];
-        $vnp_Bill_Mobile = get_data_user('web','phone');
-        $vnp_Bill_Email = get_data_user('web','email');
-        $fullName = get_data_user('web','name');
-        if (isset($fullName) && trim($fullName) != '') {
-            $name = explode(' ', $fullName);
-            $vnp_Bill_FirstName = array_shift($name);
-            $vnp_Bill_LastName = array_pop($name);
-        }
 
-        $vnp_Bill_Country= 'VN';
 
-        $vnp_Inv_Phone= $vnp_Bill_Mobile;
-        $vnp_Inv_Email= $vnp_Bill_Email;
-        $vnp_Inv_Customer= 'Phan Trung Phú';
-        $vnp_Inv_Address= 'Hà nội';
-        $vnp_Inv_Company= 'Code thuê 94';
-        $vnp_Inv_Taxcode= '0102182292';
-        $vnp_Inv_Type= 'I';
-        $inputData = array(
-            "vnp_Version" => "2.1.0",
-            "vnp_TmnCode" => $vnp_TmnCode,
-            "vnp_Amount" => $vnp_Amount,
-            "vnp_Command" => "pay",
+        $inputData = array (
+            "vnp_Version"    => "2.1.0",
+            "vnp_TmnCode"    => $vnp_TmnCode,
+            "vnp_Amount"     => $vnp_Amount,
+            "vnp_Command"    => "pay",
             "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode" => "VND",
-            "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => $vnp_OrderInfo,
-            "vnp_OrderType" => $vnp_OrderType,
-            "vnp_ReturnUrl" => $vnp_Returnurl,
-            "vnp_TxnRef" => $vnp_TxnRef,
-            "vnp_Bill_Mobile"=>$vnp_Bill_Mobile,
-            "vnp_Bill_Email"=>$vnp_Bill_Email,
-            "vnp_Bill_Country"=>$vnp_Bill_Country,
-            "vnp_Inv_Phone"=>$vnp_Inv_Phone,
-            "vnp_Inv_Email"=>$vnp_Inv_Email,
-            "vnp_Inv_Customer"=>$vnp_Inv_Customer,
-            "vnp_Inv_Address"=>$vnp_Inv_Address,
-            "vnp_Inv_Company"=>$vnp_Inv_Company,
-            "vnp_Inv_Taxcode"=>$vnp_Inv_Taxcode,
-            "vnp_Inv_Type"=>$vnp_Inv_Type
+            "vnp_CurrCode"   => "VND",
+            "vnp_IpAddr"     => $vnp_IpAddr,
+            "vnp_Locale"     => $vnp_Locale,
+            "vnp_OrderInfo"  => $vnp_OrderInfo,
+            "vnp_OrderType"  => $vnp_OrderType,
+            "vnp_ReturnUrl"  => $vnp_Returnurl,
+            "vnp_TxnRef"     => $vnp_TxnRef,
+            "vnp_ExpireDate" => $expire
         );
 
         if (isset($vnp_BankCode) && $vnp_BankCode != "") {
             $inputData['vnp_BankCode'] = $vnp_BankCode;
-        }
-        if (isset($vnp_Bill_State) && $vnp_Bill_State != "") {
-            $inputData['vnp_Bill_State'] = $vnp_Bill_State;
+        } else {
+            $inputData["vnp_BankCode"] = "VNPAYQR";
         }
 
         ksort($inputData);
@@ -173,20 +173,19 @@ class UserRechargeController extends Controller
 
         $vnp_Url = $vnp_Url . "?" . $query;
         if (isset($vnp_HashSecret)) {
-            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//
+            $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);//
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
-
         header('Location: ' . $vnp_Url);
         die();
     }
 
     public function postbackAtm(Request $request)
     {
-        try{
+        try {
             DB::beginTransaction();
             $code = $request->vnp_TxnRef;
-            $rechargeHistory     = RechargeHistory::where('code', $code)->first();
+            $rechargeHistory = RechargeHistory::where('code', $code)->first();
             if (!$rechargeHistory) {
                 return redirect()->route('get_user.recharge.atm');
             }
@@ -199,7 +198,7 @@ class UserRechargeController extends Controller
 
                 $user = User::find($rechargeHistory->user_id);
                 if (!$user) {
-                    $rechargeHistory->note   = 'User không hợp lệ';
+                    $rechargeHistory->note = 'User không hợp lệ';
                     $rechargeHistory->status = RechargeHistory::STATUS_CANCEL;
                     $rechargeHistory->save();
                     DB::commit();
@@ -211,7 +210,7 @@ class UserRechargeController extends Controller
                     $user->save();
                 }
                 DB::commit();
-                return  redirect()->route('get_user.recharge.history');
+                return redirect()->route('get_user.recharge.history');
             }
             switch ($statusCode) {
                 case "01":
@@ -243,7 +242,7 @@ class UserRechargeController extends Controller
             // show thông báo
             DB::commit();
             return redirect()->route('get_user.recharge.atm');
-        }catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             DB::rollBack();
             Log::error("------------ postbackAtm" . $exception->getMessage());
             return redirect()->route('get_user.recharge.atm');

@@ -3,17 +3,17 @@
 
 <section class="content">
     <div class="container-fluid">
-      
+      <div class="pt-4">
       <!-- /.row -->
       <div class="row">
         <div class="col-12">
-            <h2 class="mb-4" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="" style="display: flex; justify-content: space-between; align-items: center;">
       
                 <a href="{{ route('get_admin.article.create') }}" class="btn btn-success" style="font-size: 16px;">Thêm mới</a>
             </h2>
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Responsive Hover Table</h3>
+              <h3 class="card-title">Quản lí bài viết</h3>
 
               <form action="" class="card-tools">
                 <div
@@ -40,7 +40,7 @@
                         <th style="width: 80px;">Ảnh đại diện</th>
                         <th style="width: 65%;">Thông tin</th>
                         <th style="width: 200px;">Ngày tạo</th>
-                        <th></th>
+                        <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,7 +56,7 @@
                         </td>
                         <td>{{ $item->created_at }}</td>
                         <td>
-                            <a href="{{ route('get_admin.article.update', $item->id) }}" class="btn btn-info btn-sm">Chỉnh sửa</a>
+                            <a href="{{ route('get_admin.article.update', $item->id) }}" class="btn btn-info btn-sm">sửa</a>
                             <a href="{{ route('get_admin.article.delete', $item->id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">Xóa</a>
                         </td>
                     </tr>
@@ -75,7 +75,7 @@
       </div>
      
     </div>
- 
+  </div>
   </section>
 
 @stop

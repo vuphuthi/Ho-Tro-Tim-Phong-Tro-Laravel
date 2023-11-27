@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm .
- * User: trungphuna .
- * Date: 10/26/22 .
- * Time: 12:23 AM .
- */
+
 
 
 Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => ['checkLoginAdmin']], function (){
@@ -59,6 +54,7 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => ['check
     Route::group(['prefix' => 'user'], function () {
         Route::get('','AdminUserController@index')->name('get_admin.user.index')->middleware('permission:full|get_admin.user.index');
         Route::get('update/{id}','AdminUserController@edit')->name('get_admin.user.update')->middleware('permission:full|get_admin.user.update');
+        Route::get('view/{id}','AdminUserController@view')->name('get_admin.user.view')->middleware('permission:full|get_admin.user.view');
         Route::post('update/{id}','AdminUserController@update');
         Route::get('delete/{id}','AdminUserController@delete')->name('get_admin.user.delete')->middleware('permission:full|get_admin.user.delete');
     });

@@ -3,7 +3,7 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-            <div class="container mt-5">
+            <div class="pt-4">
                 <h2 style="display: flex; justify-content: space-between;">
                     
                     <a href="{{ route('get_admin.category.create') }}" class="btn btn-success" style="font-size: 16px;">Thêm
@@ -15,7 +15,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Responsive Hover Table</h3>
+                                <h3 class="card-title">Danh sách danh mục</h3>
 
                                 <form action="" class="card-tools">
                                     <div class="input-group input-group-sm" style="width: 150px">
@@ -40,7 +40,7 @@
                                             <th>Trạng thái</th>
                                             <th>Mô tả</th>
                                             <th>Ngày tạo</th>
-                                            <th></th>
+                                            <th>Thao tác</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -59,7 +59,7 @@
                                                 <td>{{ $item->created_at }}</td>
                                                 <td>
                                                     <a href="{{ route('get_admin.category.update', $item->id) }}"
-                                                        class="btn btn-info btn-sm">Chỉnh sửa</a>
+                                                        class="btn btn-info btn-sm">sửa</a>
                                                     <a href="{{ route('get_admin.category.delete', $item->id) }}"
                                                         class="btn btn-danger btn-sm">Xóa</a>
                                                 </td>

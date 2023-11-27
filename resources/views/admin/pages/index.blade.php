@@ -1,6 +1,8 @@
-@extends('admin.layouts.app_master_admin')
+@extends('admin.layouts.master_admin')
 @section('content')
-<h2 class="mt-3" style="display: flex;justify-content: space-between"><span>Hệ thống quản trị Website</span></h2>
+<div class="container-fluid">
+<div class="pt-4">
+<h2 class="" style="display: flex;justify-content: space-between"><span>Hệ thống quản trị Website</span></h2>
 <div class="row">
     <div class="col-xl-3 col-md-6">
         <div class="card bg-primary text-white mb-4">
@@ -59,7 +61,7 @@
     <div class="col-xl-6">
         <h5 class="mt-3" style="display: flex;justify-content: space-between"><span>Giao dịch mới</span></h5>
         <table class="table table-hover">
-            <the*ad>
+            <thead>
                 <tr>
                     <th style="text-align: left">Mã giao dịch</th>
                     <th class="text-center">Loại</th>
@@ -103,7 +105,7 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>Thao tác</th>
                     <th>Avatar</th>
                     <th>Thông tin</th>
                     <th>Phone</th>
@@ -126,6 +128,8 @@
             </tbody>
         </table>
     </div>
+</div>
+</div>
 </div>
 @stop
 @section('script')

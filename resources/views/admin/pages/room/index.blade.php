@@ -10,10 +10,10 @@
                 <div class="col-12 py-5">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Danh sách tin đăng</h3>
+                            <h3 class="card-title">Danh sách tin đăng phòng</h3>
 
                             <form action="" class="card-tools">
-                                <div class="input-group input-group-sm" style="width: 150px">
+                                <div class="input-group input-group-sm" style="width: 320px">
                                     <input type="text" placeholder="Name" value="{{ Request::get('n') }}" name="n"
                                         class="form-control float-right">
                                     <select name="category_id" class="form-control">

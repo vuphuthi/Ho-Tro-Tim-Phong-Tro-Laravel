@@ -30,14 +30,14 @@
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
               <table class="table table-hover text-nowrap">
-                <thead class="thead-dark">
+                <thead >
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Tên</th>
                         <th scope="col">Guard</th>
                         <th scope="col">Loại</th>
                         <th scope="col">Ngày tạo</th>
-                        <th scope="col">Hành động</th>
+                        <th scope="col">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>

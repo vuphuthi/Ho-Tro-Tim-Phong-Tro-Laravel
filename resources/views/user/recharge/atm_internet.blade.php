@@ -23,9 +23,12 @@
             <form action="" method="POST" autocomplete="off">
                 @csrf
                 <div class="form-group">
-                    <label for="phone">Số tiền nạp</label>
+                    <label for="price">Số tiền nạp</label>
                     <input type="number" class="form-control" placeholder="" name="price" value="">
                     <p><i>Số tiền cần nạp tối thiểu phải lớn 10.000 đ</i></p>
+                    @if($errors->first('price'))
+                        <p class="text-danger">{{ $errors->first('price') }}</p>
+                    @endif
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-blue btn-submit">Tiếp tục ></button>

@@ -15,7 +15,7 @@ class Room extends Model
 
     const STATUS_DEFAULT = 1; // khởi tạo
     const STATUS_PAID = 2; // đã thanh toán
-    const STATUS_EXPIRED = -2; // đã thanh toán
+    const STATUS_EXPIRED = -2; // hết hạn
     const STATUS_ACTIVE = 3; // đã duyệt
     const STATUS_CANCEL = -1; // huỷ bỏ
 

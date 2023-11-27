@@ -17,7 +17,7 @@
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
               <table class="table table-hover text-nowrap">
-                <thead class="thead-dark">
+                <thead >
                     <tr>
                         <th scope="col" style="text-align: left">Mã giao dịch</th>
                         <th scope="col" class="text-center">Khách hàng</th>

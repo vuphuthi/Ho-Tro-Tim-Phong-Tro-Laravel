@@ -21,7 +21,7 @@
                     <select name="district_id" class="form-control " id="district_id" data-placeholder="Click chọn quận huyện">
                         <option value="">Chọn quận huyện</option>
                         @foreach($districts  ?? [] as $item)
-                            <option value="{{ $item->id }}" {{ $item->id == ($room->district_id ?? 0) ? "selected" : ""}} >{{ $item->name }}</option>
+                            <option value="{{ $item->id }}" {{ $item->id == ($room->district_id ?? (old('district_id',0))) ? "selected" : ""}} >{{ $item->name }}</option>
                         @endforeach
                     </select>
                     @if ($errors->first('district_id'))
@@ -43,13 +43,13 @@
             <div class="row-lists">
                 <div class="form-group">
                     <label for="name">Số nhà</label>
-                    <input type="text" name="apartment_number" class="form-control" placeholder="Số nhà" value="{{ $room->apartment_number ?? "" }}">
+                    <input type="text" name="apartment_number" class="form-control" placeholder="Số nhà" value="{{ old('apartment_number',$room->apartment_number ?? "") }}">
                 </div>
             </div>
             <div class="row-lists">
                 <div class="form-group w-100">
                     <label for="name">Địa chỉ chính xác</label>
-                    <input type="text" name="full_address" class="form-control" placeholder="Địa chỉ chính xác">
+                    <input type="text" name="full_address" class="form-control" placeholder="Địa chỉ chính xác" value="{{ old('full_address', $room->full_address ?? '') }}">
                 </div>
             </div>
             <h4>Thông tin mô tả</h4>
@@ -58,7 +58,7 @@
                     <label for="name">Loại chuyên mục</label>
                     <select name="category_id" class="form-control" id="" data-placeholder="Click chọn danh mục">
                         @foreach($categories ?? [] as $item)
-                            <option value="{{ $item->id }}" {{ $item->id == ($room->category_id ?? 0) ? "selected" : ""}}>{{ $item->name }}</option>
+                            <option value="{{ $item->id }}" {{ $item->id == ($room->category_id ?? (old('category_id',0))) ? "selected" : ""}}>{{ $item->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -66,7 +66,7 @@
             <div class="row-lists">
                 <div class="form-group w-100">
                     <label for="name">Tiêu đề</label>
-                    <input type="text" class="form-control" name="name" placeholder="Tiêu đề" value="{{ $room->name ?? "" }}">
+                    <input type="text" class="form-control" name="name" placeholder="Tiêu đề" value="{{ old('name',$room->name ?? "") }}">
                     @if ($errors->first('name'))
                         <span class="text-error">{{ $errors->first('name') }}</span>
                     @endif
@@ -81,7 +81,7 @@
             <div class="row-lists">
                 <div class="form-group w-100">
                     <label for="name">Mô tả nội dung</label>
-                    <textarea name="description" class="form-control" id="" cols="30" rows="3">{{ $room->description ?? "" }}</textarea>
+                    <textarea name="description" class="form-control" id="" cols="30" rows="3">{{ old('description',$room->description ?? "") }}</textarea>
                     @if ($errors->first('description'))
                         <span class="text-error">{{ $errors->first('description') }}</span>
                     @endif
@@ -90,7 +90,7 @@
             <div class="row-lists">
                 <div class="form-group w-100">
                     <label for="name">Map</label>
-                    <textarea name="map" class="form-control" id="" cols="30" rows="3">{{ $room->map ?? "" }}</textarea>
+                    <textarea name="map" class="form-control" id="" cols="30" rows="3">{{ old('map',$room->map ?? "") }}</textarea>
                 </div>
             </div>
             <div class="row-lists">
@@ -140,7 +140,7 @@
             <div class="row-lists">
                 <div class="form-group">
                     <label for="name">Diện tích ( m2 )</label>
-                    <input type="text" name="area" class="form-control" placeholder="" value="{{ $room->area ?? 0 }}">
+                    <input type="text" name="area" class="form-control" placeholder="" value="{{ old('area', $room->area ?? 0) }}">
                 </div>
             </div>
             <button type="submit" class="btn btn-success" style="margin-bottom: 20px;">Lưu dữ liệu</button>

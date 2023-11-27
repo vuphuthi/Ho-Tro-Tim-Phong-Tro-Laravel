@@ -3,6 +3,7 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
+            <div class="pt-4">
 
             <!-- /.row -->
             <div class="row">
@@ -35,13 +36,13 @@
                             <table class="table table-hover text-nowrap">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
+                                        <th>Thao tác</th>
                                         <th>Tên</th>
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Trạng thái</th>
                                         <th>Ngày tạo</th>
-                                        <th></th>
+                                        <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -61,7 +62,7 @@
                                             <td>{{ $item->created_at }}</td>
                                             <td>
                                                 <a href="{{ route('get_admin.account.update', $item->id) }}"
-                                                    class="btn btn-info btn-sm">Chỉnh sửa</a>
+                                                    class="btn btn-info btn-sm">sửa</a>
                                                 <a href="{{ route('get_admin.account.delete', $item->id) }}"
                                                     class="btn btn-danger btn-sm">Xóa</a>
                                             </td>
@@ -80,7 +81,7 @@
             </div>
 
         </div>
-
+    </div>
     </section>
 
 @stop

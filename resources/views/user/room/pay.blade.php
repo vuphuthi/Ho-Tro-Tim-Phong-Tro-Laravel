@@ -42,7 +42,7 @@
                 <div class="row-lists">
                     <div class="form-group row-lists-3">
                         <label for="room_type">Chọn loại tin</label>
-                        <select name="room_type" id="" class="js-change-type">
+                        <select name="room_type"required  id="" class="js-change-type">
                             <option value="1">Tin thường ( 2.000đ / ngày )</option>
                             <option value="2">Vip 3 ( 20.000đ / ngày )</option>
                             <option value="3">Vip 2 ( 30.000đ / ngày )</option>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="form-group row-lists-3">
                         <label for="name">Số ngày</label>
-                        <select name="day" id="day">
+                        <select name="day" required id="day">
                             @for($i = 5 ; $i <= 20 ; $i ++)
                                 <option value="{{ $i }}">{{ $i }} ngày</option>
                             @endfor
@@ -60,7 +60,7 @@
                     </div>
                     <div class="form-group row-lists-3">
                         <label for="name">Ngày bắt đầu</label>
-                        <input type="date" class="form-control" min="{{ date('Y-m-d') }}" name="time_start">
+                        <input type="date" required class="form-control" min="{{ date('Y-m-d') }}" name="time_start">
                     </div>
                     <div class="form-group row-lists-3">
                         <label for="name">Thành tiền</label>

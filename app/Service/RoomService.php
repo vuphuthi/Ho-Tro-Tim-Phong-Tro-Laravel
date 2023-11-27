@@ -63,7 +63,7 @@ class RoomService
     public static function getListsRoom($request, $params = [])
     {
         $self = new self();
-        $rooms = Room::whereIn('status',[ROOM::STATUS_ACTIVE, Room::STATUS_EXPIRED]);
+        $rooms = Room::whereIn('status',[ROOM::STATUS_ACTIVE]);
 
         if ($categoryId = Arr::get($params,'category_id'))
             $rooms->where('category_id', $categoryId);
@@ -82,6 +82,8 @@ class RoomService
 
         if ($range_area = Arr::get($params,'area'))
             $rooms->where('range_area', $range_area);
+
+
 
         $rooms = $rooms->select($self->column)->orderByDesc('id')->paginate(10);
 

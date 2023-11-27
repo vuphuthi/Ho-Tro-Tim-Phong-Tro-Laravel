@@ -4,16 +4,17 @@
 
 <section class="content">
     <div class="container-fluid">
-      
+      <div class="pt-4">
+
       <!-- /.row -->
       <div class="row">
         <div class="col-12">
-            <h2 style="display: flex; justify-content: space-between; align-items: center;">
-                <a href="{{ route('get_admin.role.create') }}" class="btn btn-success btn-sm">Thêm mới</a>
-            </h2>
+            <h3 style="display: flex; justify-content: space-between; align-items: center;">
+                <a href="{{ route('get_admin.role.create') }}" class="btn btn-success btn-sm " style="font-size: 16px;">Thêm mới</a>
+            </h3>
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Responsive Hover Table</h3>
+              <h3 class="card-title">Quản lí phân quyền</h3>
 
               <form class="card-tools">
                 <div
@@ -34,12 +35,12 @@
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
               <table class="table table-hover text-nowrap">
-                <thead class="thead-dark">
+                <thead >
                     <tr>
-                        <th>#</th>
+                        <th>Thao tác</th>
                         <th>Tên</th>
                         <th>Ngày tạo</th>
-                        <th class="text-center">Hành động</th>
+                        <th class="text-center">thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,7 +50,7 @@
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td class="text-center">
-                            <a href="{{ route('get_admin.role.update', $item->id) }}" class="btn btn-sm btn-primary">Sửa</a>
+                            <a href="{{ route('get_admin.role.update', $item->id) }}" class="btn btn-info btn-sm">Sửa</a>
                             <a href="{{ route('get_admin.role.delete', $item->id) }}" class="btn btn-sm btn-danger">Xóa</a>
                         </td>
                     </tr>
@@ -68,6 +69,7 @@
       </div>
      
     </div>
+  </div>
  
   </section>
 

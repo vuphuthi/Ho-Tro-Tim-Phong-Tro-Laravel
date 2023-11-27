@@ -16,9 +16,13 @@ class SearchRoomService
 {
     public static function index(Request $request)
     {
-        $params = $request->all();
-        if (isset($params['city_id'])) $params["location_city_id"] = $params['city_id'];
-        if (isset($params['district_id'])) $params["location_district_id"] = $params['district_id'];
+        $filters = $request->all();
+        $params = [];
+        if (isset($filters['city_id'])) $params["location_city_id"] = $filters['city_id'];
+        if (isset($filters['district_id'])) $params["location_district_id"] = $filters['district_id'];
+        if (isset($filters['district_id'])) $params["location_district_id"] = $filters['district_id'];
+        if (isset($filters['wards_id'])) $params["wards_id"] = $filters['wards_id'];
+        if (isset($filters['price'])) $params["price"] = $filters['price'];
 
         $rooms    = RoomService::getListsRoom($request, $params);
         return [
