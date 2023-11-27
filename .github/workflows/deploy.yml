@@ -1,0 +1,46 @@
+name: Deploy
+
+on:
+    push:
+        branches: [ master ]
+    pull_request:
+        branches: [ master ]
+
+jobs:
+    build:
+
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v1
+
+            - name: SCP FOLDER
+              uses: appleboy/scp-action@master
+              env:
+                  HOST: ${{ secrets.IP }}
+                  USERNAME: ${{ secrets.USERNAME }}
+                  PORT: ${{ secrets.PORT }}
+                  PASSWORD: ${{ secrets.PASSWORD }}
+              with:
+                  source: "."
+                  target: "/var/www/khodoan/seri-phongtro"
+
+            - name: Deploy
+              uses: appleboy/ssh-action@master
+              with:
+                  HOST: ${{ secrets.IP }}
+                  USERNAME: ${{ secrets.USERNAME }}
+                  PORT: ${{ secrets.PORT }}
+                  PASSWORD: ${{ secrets.PASSWORD }}
+                  script: |
+                      cd /var/www/khodoan/seri-phongtro
+                      git pull origin master
+                      composer install
+                      chown -R www-data:www-data /var/www/khodoan/seri-phongtro
+                      chmod -R 755 storage
+                      php artisan view:clear
+                      php artisan config:clear
+                      php artisan config:cache
+                      composer dump-autoload
+                      
+                      
