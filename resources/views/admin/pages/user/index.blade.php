@@ -68,32 +68,21 @@
                                         <td scope="row">{{ $item->phone }}</td>
                                         <td scope="row">{{ $item->facebook ?? "Chưa cập nhật" }}</td>
                                         <td scope="row">{{ $item->created_at }}</td>
-                                        <td scope="row">
+                                        {{-- <td scope="row">
                                             <a href="{{ route('get_admin.user.view', $item->id) }}" class="text-info">View</a>
                                             <a href="{{ route('get_admin.user.update', $item->id) }}">Update</a>
                                             <a href="{{ route('get_admin.user.delete', $item->id) }}" class="text-danger">Delete</a>
+                                        </td> --}}
+                                        <td scope="row">
+                                            <a href="{{ route('get_admin.user.view', $item->id) }}" class="text-info">Chi tiết</a>
+                                            <a href="{{ route('get_admin.user.update', $item->id) }}"
+                                                class="btn btn-info btn-sm">sửa</a>
+                                            <a href="{{ route('get_admin.user.delete', $item->id) }}"
+                                                class="btn btn-danger btn-sm">xóa</a>
                                         </td>
                                     </tr>
                                     @endforeach
-                                    @foreach ($users ?? [] as $item)
-                                        <tr>
-                                            <td scope="row">{{ $item->id }}</td>
-                                            <td scope="row">
-                                                <img src="{{ pare_url_file($item->avatar) }}"
-                                                    style="width: 60px; height: 60px; border-radius: 50%;" alt="">
-                                            </td>
-                                            <td scope="row">{{ $item->name }}</td>
-                                            <td scope="row">{{ $item->email }}</td>
-                                            <td scope="row">{{ $item->phone }}</td>
-                                            <td scope="row">{{ $item->created_at }}</td>
-                                            <td scope="row">
-                                                <a href="{{ route('get_admin.user.update', $item->id) }}"
-                                                    class="btn btn-info btn-sm">sửa</a>
-                                                <a href="{{ route('get_admin.user.delete', $item->id) }}"
-                                                    class="btn btn-danger btn-sm">xóa</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                            
                                 </tbody>
                             </table>
                         </div>

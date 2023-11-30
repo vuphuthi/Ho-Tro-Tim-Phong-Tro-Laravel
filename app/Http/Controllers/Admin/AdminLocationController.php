@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Location;
+use App\Models\Category;
+use App\Models\Room;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,20 +15,25 @@ class AdminLocationController extends Controller
 {
     public function index(Request $request)
     {
-        $locations = Location::whereRaw(1);
+        $rooms      = Room::with('category:id,name,slug','city:id,name,slug','district:id,name,slug','wards:id,name,slug');
+        if ($request->category_id)
+            $rooms->where('category_id', $request->category_id);
 
         if ($request->n)
-            $locations->where('name', 'like', '%' . $request->n . '%');
+            $rooms->where('name', 'like', '%' . $request->n . '%');
 
-        $locations = $locations->orderByDesc('id')->paginate(40);
+        $rooms      = $rooms->orderByDesc('id')->paginate(10);
+        $categories = Category::select('id', 'name')->get();
 
-        $viewData = [
-            'locations' => $locations,
-            'query'     => $request->query()
-        ];
-
-        return view('admin.pages.location.index', $viewData);
+        $abc = [];
+    foreach($rooms as $key=> $room){
+        $abc[$key][0] = floatval($room->x);
+        $abc[$key][1] = floatval($room->y);
+        $abc[$key][3] = floatval($room->description);
     }
+        return view('admin.pages.location.index')->with(['rooms'=>$rooms, 'categories'=>$categories, 'abc'=>$abc]);
+    }
+
 
     public function create()
     {

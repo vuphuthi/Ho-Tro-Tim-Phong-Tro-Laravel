@@ -24,13 +24,14 @@ class AdminRoomController extends Controller
         $rooms      = $rooms->orderByDesc('id')->paginate(10);
         $categories = Category::select('id', 'name')->get();
 
-        $viewData   = [
-            'rooms'      => $rooms,
-            'categories' => $categories,
-            'query'      => $request->query()
-        ];
-
-        return view('admin.pages.room.index', $viewData);
+        // dd($rooms);
+        $abc = [];
+    foreach($rooms as $key=> $room){
+        $abc[$key][0] = floatval($room->x);
+        $abc[$key][1] = floatval($room->y);
+        $abc[$key][3] = floatval($room->description);
+    }
+        return view('admin.pages.room.index')->with(['rooms'=>$rooms, 'categories'=>$categories, 'abc'=>$abc]);
     }
 
     public function success($id)

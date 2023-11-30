@@ -25,7 +25,10 @@
                 </div>
                 <div class="form-group">
                     <label for="phone">Số điện thoại</label>
-                    <input type="text" class="form-control" required placeholder="" name="phone" value="{{ old('phone') }}">
+                    <input type="text" class="form-control" placeholder="" name="phone" value="{{ old('phone') }}">
+                    @if($errors->first('phone'))
+                        <p class="text-danger">{{ $errors->first('phone') }}</p>
+                    @endif
                 </div>
                 <div class="form-group">
                     <label for="password">Tạo mật khẩu</label>

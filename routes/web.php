@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/geolocation', 'GeolocationController@index')->name('geolocation.index');
 route::view('m', 'admin.layouts.form');
 Route::group(['namespace' => 'Auth'], function () {
     Route::get('dang-ky.html', 'RegisterController@index')->name('get.register');
@@ -28,7 +28,7 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::get('admin/login', 'AuthAdminController@login')->name('get_admin.login');
     Route::post('admin/login', 'AuthAdminController@postLogin')->name('post_admin.login');
 
-    Route::get('admin/logout', 'AuthAdminController@logout')->name('get_admin.logout');
+    Route::get('admin/logout', 'AuthAdmiuser/room/createnController@logout')->name('get_admin.logout');
 });
 
 Route::group(['namespace' => 'Frontend'], function () {
@@ -64,5 +64,6 @@ Route::group(['namespace' => 'Frontend'], function () {
 });
 Route::get('district', 'User\UserRoomController@loadDistrict')->name('get_user.load.district');
 Route::get('wards', 'User\UserRoomController@loadWards')->name('get_user.load.wards');
+Route::get('/toado', 'User\UserRoomController@yx')->name('get_user.toado');;
 include 'route_user.php';
 include 'route_admin.php';

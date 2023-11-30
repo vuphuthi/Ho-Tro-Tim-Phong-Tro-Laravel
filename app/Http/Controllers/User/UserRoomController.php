@@ -17,6 +17,16 @@ use Illuminate\Support\Str;
 
 class UserRoomController extends Controller
 {
+    public function yx()
+    {
+        // if ($request->ajax()) {
+            $xy = DB::table('rooms')->pluck('x', 'y');
+            // $y = $xy->y;
+            dd($xy);
+
+            return response()->json($locations);
+        // }
+    }
     public function index(Request $request)
     {
         $rooms = Room::with('category:id,name,slug', 'city:id,name,slug', 'district:id,name,slug', 'wards:id,name,slug', 'paymentHistory:id,room_id')

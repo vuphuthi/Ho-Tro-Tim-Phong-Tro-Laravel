@@ -37,6 +37,7 @@
             </tr>
             </thead>
             <tbody>
+                
             @foreach($rooms ?? [] as $item)
                 <tr>
                     <td style="text-align: center">#{{ $item->id }}</td>

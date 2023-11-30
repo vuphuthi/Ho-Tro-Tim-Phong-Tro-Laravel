@@ -27,6 +27,7 @@ class UserRegisterRequest extends FormRequest
             'email'                 => 'required|unique:users,email',
             'password'              => 'required|confirmed|min:6',
             'password_confirmation' => 'required',
+            'phone'                 => 'required|min:10|numeric'
         ];
     }
 
@@ -39,6 +40,10 @@ class UserRegisterRequest extends FormRequest
             'password.required'              => 'Mật khẩu không được để trống',
             'password.confirmed'             => 'Mật khẩu xác nhận không khớp',
             'password.min'                   => 'Mật khẩu ít nhất 6 ký tự',
+            'phone.required'                 => 'Số điện thoại không được để trống',
+            // 'phone.max'                      => 'Số điện thoại phải lơn hơn 0',
+            // 'phone.numeric'                 => 'Số điện thoại phải là số',
+
         ];
     }
 }
