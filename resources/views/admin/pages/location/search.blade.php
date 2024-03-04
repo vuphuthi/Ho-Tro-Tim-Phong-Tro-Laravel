@@ -1,5 +1,5 @@
 <div id="searchbar">
-    <form role="search" method="GET" action="{{ route('get.room.search') }}" class="searchform js-form-submit-data">
+    <form role="search" method="GET" action="{{ route('get_admin.location.index') }}" class="searchform js-form-submit-data">
         <div class="search_field" style="justify-content: space-between">
             <style>
                 .search_field_item {
@@ -38,6 +38,40 @@
                 #searchbar .searchform .search_field .search_field_item .search_field_item_label {
                     font-size: unset;
                 }
+
+                .multiselect {
+                    width: 200px;
+                }
+
+                .selectBox {
+                    position: relative;
+                }
+
+                .overSelect {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                }
+
+                #checkboxes {
+                    display: none;
+                    border: 1px #dadada solid;
+                }
+
+                #checkboxes label {
+                    display: block;
+                    background: #ffffff;
+                }
+
+                #checkboxes label:hover {
+                    background-color: #1e90ff;
+                }
+                #searchbar .searchform .search_field .search_field_item .search_field_item_label {
+                    font-size: unset;
+                }
+
             </style>
             <div class="search_field_item search_field_item_loaitin">
                 <label class="search_field_item_label">Loại tin</label>
@@ -133,75 +167,3 @@
         </div>
     </form>
 </div>
-
-<script>
-    var URL_LOAD_DISTRICT = '{{ route("get_user.load.district") }}'
-    var URL_LOAD_WARD = '{{ route("get_user.load.wards") }}'
-</script>
-@push('script')
-    <script src="/js/user_room.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" crossorigin="anonymous"
-            referrerpolicy="no-referrer"></script>
-    <script>
-        var expanded = false;
-
-        function showCheckboxes() {
-            var checkboxes = document.getElementById("checkboxes");
-            if (!expanded) {
-                checkboxes.style.display = "block";
-                expanded = true;
-            } else {
-                checkboxes.style.display = "none";
-                expanded = false;
-            }
-        }
-
-        $(function () {
-            $("#city_id").change(function () {
-                let $this = $(this);
-                let city_id = $this.val();
-                console.log('----', city_id);
-
-                $.ajax({
-                    url: URL_LOAD_DISTRICT,
-                    data: {
-                        city_id: city_id
-                    },
-                })
-                    .done(function (data) {
-                        if (data) {
-                            let options = `<option value="0"> Chọn quận huyện </option>`;
-                            data.map((item, index) => {
-                                options += `<option value="${item.id}"> ${item.name}</option>`
-                            })
-                            $("#district_id").html(options);
-                        }
-                        console.log('---------- data: ', data);
-                    });
-            })
-
-            $("#district_id").change(function () {
-                let $this = $(this);
-                let district_id = $this.val();
-                console.log('----', district_id);
-
-                $.ajax({
-                    url: URL_LOAD_WARD,
-                    data: {
-                        district_id: district_id
-                    },
-                })
-                    .done(function (data) {
-                        if (data) {
-                            let options = `<option value="0"> Chọn phường xã </option>`;
-                            data.map((item, index) => {
-                                options += `<option value="${item.id}"> ${item.name}</option>`
-                            })
-                            $("#wards_id").html(options);
-                        }
-                        console.log('---------- data: ', data);
-                    });
-            })
-        })
-    </script>
-@endpush

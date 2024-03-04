@@ -132,6 +132,10 @@
                                             <td>
                                                 <span style="font-size: 14px;"
                                                     class="{{ $item->getStatus($item->status)['class'] ?? '...' }}">{{ $item->getStatus($item->status)['name'] ?? '...' }}</span>
+                                                <a href="{{ route('room-admin.detail', ['id' => $item->id]) }}">
+                                                    <span style="font-size: 14px;"
+                                                          class="">Chi tiết</span>
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach

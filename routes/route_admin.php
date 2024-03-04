@@ -63,6 +63,7 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => ['check
         Route::get('','AdminRoomController@index')->name('get_admin.room.index')->middleware('permission:full|get_admin.room.index');
         Route::get('create','AdminRoomController@create')->name('get_admin.room.create')->middleware('permission:full|get_admin.room.create');
         Route::post('create','AdminRoomController@store');
+        Route::get('detail/{id}','AdminRoomController@show')->name('room-admin.detail');
 
         Route::get('success/{id}','AdminRoomController@success')->name('get_admin.room.success')->middleware('permission:full|get_admin.room.success');
         Route::get('expires/{id}','AdminRoomController@expires')->name('get_admin.room.expires')->middleware('permission:full|get_admin.room.expires');
@@ -107,5 +108,16 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => ['check
         Route::post('update/{id}','AdminAccountController@update');
 
         Route::get('delete/{id}','AdminAccountController@delete')->name('get_admin.account.delete')->middleware('permission:full|get_admin.account.delete');
+    });
+
+    Route::group(['prefix' => 'option'], function () {
+        Route::get('','AdminOptionController@index')->name('get_admin.option.index')->middleware('permission:full|get_admin.option.index');
+        Route::get('create','AdminOptionController@create')->name('get_admin.option.create')->middleware('permission:full|get_admin.option.create');
+        Route::post('create','AdminOptionController@store');
+
+        Route::get('update/{id}','AdminOptionController@edit')->name('get_admin.option.update')->middleware('permission:full|get_admin.option.update');
+        Route::post('update/{id}','AdminOptionController@update');
+
+        Route::get('delete/{id}','AdminOptionController@delete')->name('get_admin.option.delete')->middleware('permission:full|get_admin.option.delete');
     });
 });

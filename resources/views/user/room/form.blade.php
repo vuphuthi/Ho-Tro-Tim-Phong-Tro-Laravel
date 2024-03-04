@@ -1,16 +1,22 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <style>
     #map {
         height: 20vh;
         width: 100%;
-
     }
+
+    .file-caption.form-control.kv-fileinput-caption {
+        display: none;
+    }
+
 </style>
 <form action="" method="POST" autocomplete="off" enctype="multipart/form-data">
     @csrf
     <div class="form-room">
         <div class= "room-left">
-            <h4>Địa chỉ cho thuê</h4>
+        <h4>Địa chỉ cho thuê</h4>
             <div class="row-lists">
                 <div class="form-group row-lists-3">
                     <label for="name">Tỉnh / TP</label>
@@ -27,7 +33,7 @@
                 </div>
                 <div class="form-group row-lists-3">
                     <label for="name">Quận huyện</label>
-                    <select name="district_id" class="form-control " id="district_id"
+                    <select name="district_id" class="form-control" id="district_id"
                         data-placeholder="Click chọn quận huyện">
                         <option value="">Chọn quận huyện</option>
                         @foreach ($districts ?? [] as $item)
@@ -43,6 +49,7 @@
                 <div class="form-group row-lists-3">
                     <label for="name">Phường xã</label>
                     <select name="wards_id" class="form-control" id="wards_id" data-placeholder="Click chọn phường xã">
+                        <option value="">Chọn phường xã</option>
                         @foreach ($wards ?? [] as $item)
                             <option value="{{ $item->id }}"
                                 {{ $item->id == ($room->wards_id ?? 0) ? 'selected' : '' }}>{{ $item->name }}
@@ -107,31 +114,32 @@
                     @endif
                 </div>
             </div>
+            <div class="row-lists">
+                <div class="form-group w-100">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#showModal" type="button">Click để chọn tiện ích</button>
+{{--                    <select name="room_option_item" class="form-select" multiple size="3">--}}
+{{--                        <option value=""></option>--}}
+{{--                        @foreach($optionItems as $optionItem)--}}
+{{--                            <option value="{{ $optionItem->id }}">{{ $optionItem->name }}</option>--}}
+{{--                        @endforeach--}}
+{{--                    </select>--}}
+{{--                    @if ($errors->first('description'))--}}
+{{--                        <span class="text-error">{{ $errors->first('description') }}</span>--}}
+{{--                    @endif--}}
+                </div>
+            </div>
             {{-- <div>
                 <h1>HTML Geolocation</h1>
                 <p>Click the button to get your coordinates.</p>
-            
+
                 <button type="button" onclick="getLocation()">Try It</button>
-            
+
                 <p id="demo">
                     <input type="text" name="x" id="x" value="">
                     <input type="text" name="y" id="y" value="">
                 </p>
             </div> --}}
-            <div>
-                <h1>HTML Geolocation</h1>
-                <p>Click the button to get your coordinates.</p>
 
-                <button type="button" onclick="getLocation()">Try It</button>
-
-                <p id="demo">
-                    <label for="x">Latitude:</label>
-                    <input type="text" name="x" id="x" value="">
-                    <label for="y">Longitude:</label>
-                    <input type="text" name="y" id="y" value="">
-                </p>
-            </div>
-            <div id="map" style="height: 100px;"></div>
             {{-- <div class="row-lists">
                 <div class="form-group w-100">
                     <label for="name">Map</label>
@@ -218,12 +226,40 @@
             </div>
         </div>
     </div>
+
+<div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Tiện ích</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if(isset($optionItems))
+                    @foreach($optionItems as $optionItem)
+                        <div class="d-flex" style="margin-bottom: 10px">
+                            <label>{{ $optionItem['name'] }}</label>
+                            <input type="checkbox"
+                            @if(isset($optionItem['checked']) && $optionItem['checked']) checked @endif
+                            name="option[]" value="{{ $optionItem['id'] }}">
+                        </div>
+                    @endforeach
+                @endif
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </form>
 
+
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js">
-    var URL_LOAD_DISTRICT = '{{ route('get_user.load.district') }}'
-    var URL_TOADO = '{{ route('get_user.toado') }}'
-    var URL_LOAD_WARD = '{{ route('get_user.load.wards') }}'
+    {{--var URL_LOAD_DISTRICT = '{{ route('get_user.load.district') }}'--}}
+    {{--var URL_TOADO = '{{ route('get_user.toado') }}'--}}
+    {{--var URL_LOAD_WARD = '{{ route('get_user.load.wards') }}'--}}
 </script>
 @push('script')
     <script src="/js/user_room.js"></script>
@@ -239,210 +275,6 @@
         type="text/javascript"></script>
 
     <script>
-        // function showPosition(position) {
-        //     var x = document.getElementById("x");
-        //     var y = document.getElementById("y");
-        //     x.value = position.coords.latitude;
-        //     y.value = position.coords.longitude;
-        // }
-        //         function showPosition(position) {
-        //     var latitude = position.coords.latitude;
-        //     var longitude = position.coords.longitude;
-
-        //     // Hiển thị tọa độ trong input
-        //     document.getElementById("coordinates").value = `${latitude}, ${longitude}`;
-
-        //     // Tích hợp Leaflet và hiển thị bản đồ
-        //     var map = L.map('map').setView([latitude, longitude], 13);
-        //     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        //     L.marker([latitude, longitude]).addTo(map);
-        // }
-        const x = document.getElementById("coordinates");
-        // var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 13);
-        // var map = L.map('map').setView([21.8582952038295, 106.732825239514], 10);     
-
-        var data = [
-        [21.8582952038295, 106.732825239514],
-        [21.8610864304347, 106.731192613847],
-        [21.8627877227485, 106.730906188291],
-        [21.8645155771512, 106.727096728372],
-        [21.8664826473176, 106.724404328149],
-        [21.8669877015013, 106.720251157592],
-        [21.8669079562366, 106.720136587346],
-        [21.869353457852, 106.718446676567]
-    ];
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-                x.innerHTML = "Geolocation is not supported by this browser.";
-            }
-        }
-
-        function showPosition(position) {
-            var x = document.getElementById("x");
-            var y = document.getElementById("y");
-            x.value = position.coords.latitude;
-            y.value = position.coords.longitude;
-
-            // Tích hợp Leaflet và hiển thị bản đồ
-            var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 13);
-            // var map = L.map('map').setView([21.8582952038295, 106.732825239514], 10);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
-            
-        }
-        function fetchDataAndDisplayMarkers(map) {
-        // Sử dụng AJAX để lấy dữ liệu từ Laravel
-        $.ajax({
-            url: '/lay-du-lieu-tu-db', // Đặt URL tương ứng với route Laravel của bạn
-            method: 'GET',
-            success: function(response) {
-                // Lấy dữ liệu từ response và thêm vào bản đồ
-                var myIcon1 = new L.icon({
-                    iconUrl: 'https://cdn4.iconfinder.com/map/icons/basic-ui-pack-flat-s94-1/64/Basic_UI_Icon_Pack_-_Flat_map_pointer-512.png',
-                    iconSize: [30, 30],
-                    iconAnchor: [12, 12],
-                    popupAnchor: [1, -34],
-                    shadowSize: [41, 41]
-                });
-
-                // Thêm marker vào bản đồ cho mỗi điểm dữ liệu từ cơ sở dữ liệu
-                for (var i = 0; i < response.data.length; i++) {
-                    var marker = new L.marker([response.data[i].x, response.data[i].y], {
-                        icon: myIcon1
-                    });
-                    marker.bindPopup('Có thể đưa thêm dữ liệu vào đây').openPopup();
-                    marker.addTo(map);
-                }
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    }
-        var myIcon1 = new L.icon({
-            iconUrl: 'https://cdn4.iconfinder.com/map/icons/basic-ui-pack-flat-s94-1/64/Basic_UI_Icon_Pack_-_Flat_map_pointer-512.png',
-            iconSize: [30, 30],
-            iconAnchor: [12, 12],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        });
-        for (var i = 0; i < data.length; i++) {
-            marker = new L.marker([data[i][0], data[i][1]], {
-                icon: myIcon1
-            });
-            marker.bindPopup('Co the do them du lieu ra day').openPopup();
-            marker.addTo(map);
-        }
-        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> '
-        });
-        osm.addTo(map);
-
-
-
-        var google3D = L.tileLayer('http://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}', {
-            attribution: '&copy; <a href="https://www.google.com">Google map</a> contributors'
-        });
-
-
-        var centrals = L.geoJSON(CentralJSON, {
-            onEachFeature: function(feature, layer) {
-                const popupContent1 =
-
-                    "<tr><td> Tỉnh: </td><td>" +
-                    feature.properties.NAME_1 + ", Việt Nam" +
-                    "<br></td></tr>" +
-                    "<tr><td> Diện tích: </td><td>" +
-                    feature.properties.Shape_Area + "km<sup>2"
-                "</td></tr>";
-                layer.bindPopup(popupContent1);
-            },
-            style: {
-                fillColor: 'orange',
-                fillOpacity: 0.8,
-
-            }
-
-        }).addTo(map);
-
-        var norths = L.geoJSON(NorthJSON, {
-            onEachFeature: function(feature, layer) {
-                const popupContent1 =
-
-                    "<tr><td> Tỉnh: </td><td>" +
-                    feature.properties.NAME_1 + ", Việt Nam" +
-                    "<br></td></tr>" +
-                    "<tr><td> Diện tích: </td><td>" +
-                    feature.properties.Shape_Area + "km<sup>2"
-                "</td></tr>";
-                layer.bindPopup(popupContent1);
-            },
-            style: {
-                fillColor: 'green',
-                fillOpacity: 0.8,
-
-            }
-
-        }).addTo(map);
-
-        var souths = L.geoJSON(SouthJSON, {
-            onEachFeature: function(feature, layer) {
-                const popupContent1 =
-
-                    "<tr><td> Tỉnh: </td><td>" +
-                    feature.properties.NAME_1 + ", Việt Nam" +
-                    "<br></td></tr>" +
-                    "<tr><td> Diện tích: </td><td>" +
-                    feature.properties.Shape_Area + "km<sup>2"
-                "</td></tr>";
-                layer.bindPopup(popupContent1);
-            },
-            style: {
-                fillColor: 'red',
-                fillOpacity: 0.8,
-
-            }
-
-        }).addTo(map);
-
-        var tns = L.geoJSON(TNJSON, {
-            onEachFeature: function(feature, layer) {
-                const popupContent1 =
-
-                    "<tr><td> Tỉnh: </td><td>" +
-                    feature.properties.NAME_1 + ", Việt Nam" +
-                    "<br></td></tr>" +
-                    "<tr><td> Diện tích: </td><td>" +
-                    feature.properties.Shape_Area + "km<sup>2"
-                "</td></tr>";
-                layer.bindPopup(popupContent1);
-            },
-            style: {
-                fillColor: 'pink',
-                fillOpacity: 0.8,
-
-            }
-
-        }).addTo(map);
-
-        // Control
-        var baseLayers = {
-            'OSM': osm,
-            'Google map': google3D,
-
-        };
-        var overlayers = {
-
-
-            'CenTral': centrals,
-            'North': norths,
-            'South': souths,
-            'TN': tns,
-
-        }
-        L.control.layers(baseLayers, overlayers).addTo(map);
         $(function() {
             $("#city_id").change(function() {
                 let $this = $(this);
@@ -450,13 +282,14 @@
                 console.log('----', city_id);
 
                 $.ajax({
-                        url: URL_LOAD_DISTRICT,
+                        url: '{{ route('get_user.load.district') }}',
                         data: {
                             city_id: city_id
                         },
                     })
                     .done(function(data) {
                         if (data) {
+                            console.log(data)
                             let options = `<option value="0"> Chọn quận huyện </option>`;
                             data.map((item, index) => {
                                 options += `<option value="${item.id}"> ${item.name}</option>`
@@ -473,7 +306,7 @@
                 console.log('----', district_id);
 
                 $.ajax({
-                        url: URL_LOAD_WARD,
+                        url: '{{ route('get_user.load.wards') }}',
                         data: {
                             district_id: district_id
                         },

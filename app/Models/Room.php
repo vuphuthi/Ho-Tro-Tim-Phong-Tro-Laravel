@@ -69,4 +69,14 @@ class Room extends Model
     public function paymentHistory(){
         return $this->hasMany(PaymentHistory::class,'room_id');
     }
+
+    public function roomOptionItem()
+    {
+        return $this->belongsToMany(OptionItems::class, RoomOptionItem::class, 'room_id', 'option_item_id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
 }

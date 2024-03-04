@@ -15,23 +15,56 @@ class AdminLocationController extends Controller
 {
     public function index(Request $request)
     {
-        $rooms      = Room::with('category:id,name,slug','city:id,name,slug','district:id,name,slug','wards:id,name,slug');
+        $rooms = Room::with('category:id,name,slug', 'city:id,name,slug', 'district:id,name,slug', 'wards:id,name,slug', 'roomOptionItem');
         if ($request->category_id)
             $rooms->where('category_id', $request->category_id);
+
+        if ($request->city_id)
+            $rooms->where('city_id', $request->city_id);
+
+        if ($request->price)
+            $rooms->where('price', $request->price);
+
+        if ($request->option_items) {
+            foreach ($request->option_items as $option_item) {
+                $rooms->whereHas('roomOptionItem', function ($query) use ($option_item) {
+                    $query->where('room_option_item.option_item_id', $option_item);
+                });
+            }
+        }
+
+        if ($request->area)
+            $rooms->where('area', $request->area);
 
         if ($request->n)
             $rooms->where('name', 'like', '%' . $request->n . '%');
 
-        $rooms      = $rooms->orderByDesc('id')->paginate(10);
+        $rooms->when($request->get('category_id'), function ($q) use ($request) {
+            $q->where('category_id', $request->get('category_id'));
+        })
+            ->when($request->get('price'), function ($q) use ($request) {
+                $q->where('price', $request->get('price'));
+            })
+            ->when($request->get('area'), function ($q) use ($request) {
+                $q->where('area', $request->get('area'));
+            });
+
+        $rooms = $rooms->orderByDesc('id')->paginate(10);
         $categories = Category::select('id', 'name')->get();
 
-        $abc = [];
-    foreach($rooms as $key=> $room){
-        $abc[$key][0] = floatval($room->x);
-        $abc[$key][1] = floatval($room->y);
-        $abc[$key][3] = floatval($room->description);
-    }
-        return view('admin.pages.location.index')->with(['rooms'=>$rooms, 'categories'=>$categories, 'abc'=>$abc]);
+        $showMap = [];
+        foreach ($rooms as $room) {
+            $showMap[] = [
+                'name' => $room->description,
+                'category_name' => $room->category->name,
+                'y' => $room->y,
+                'x' => $room->x,
+                'category_id' => $room->category_id,
+                'id' => $room->id,
+            ];
+        }
+
+        return view('admin.pages.location.index')->with(['rooms' => $rooms, 'categories' => $categories, 'showMap' => $showMap]);
     }
 
 
@@ -49,8 +82,8 @@ class AdminLocationController extends Controller
     public function store(Request $request)
     {
         try {
-            $data               = $request->except('_token', 'avatar');
-            $data['slug']       = Str::slug($request->name);
+            $data = $request->except('_token', 'avatar');
+            $data['slug'] = Str::slug($request->name);
             $data['created_at'] = Carbon::now();
             if ($request->avatar) {
                 $file = upload_image('avatar');
@@ -70,10 +103,10 @@ class AdminLocationController extends Controller
     public function edit($id)
     {
         $location = Location::find($id);
-        $cities   = Location::get();
+        $cities = Location::get();
         $viewData = [
             'location' => $location,
-            'cities'   => $cities
+            'cities' => $cities
         ];
 
         return view('admin.pages.location.update', $viewData);
@@ -82,8 +115,8 @@ class AdminLocationController extends Controller
     public function update($id, Request $request)
     {
         try {
-            $data               = $request->except('_token', 'avatar');
-            $data['slug']       = Str::slug($request->name);
+            $data = $request->except('_token', 'avatar');
+            $data['slug'] = Str::slug($request->name);
             $data['updated_at'] = Carbon::now();
 
             if ($request->avatar) {
@@ -106,5 +139,33 @@ class AdminLocationController extends Controller
     {
         Location::find($id)->delete();
         return redirect()->back();
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Room::select('id', 'name', 'x', 'y', 'category_id')
+                ->when($request->get('category_id'), function ($q) use ($request) {
+                    $q->where('category_id', $request->get('category_id'));
+                })
+                ->when($request->get('price'), function ($q) use ($request) {
+                    $q->where('price', $request->get('price'));
+                })
+                ->when($request->get('area'), function ($q) use ($request) {
+                    $q->where('area', $request->get('area'));
+                })->get();
+
+            $showMap = [];
+            foreach ($query as $room) {
+                $showMap[] = [
+                    'name' => $room->description,
+                    'y' => $room->y,
+                    'x' => $room->x,
+                    'category_id' => $room->category_id,
+                ];
+            }
+
+            return response()->json($showMap);
+        }
     }
 }

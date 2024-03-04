@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRoomRequest;
 use App\Models\Category;
 use App\Models\Location;
+use App\Models\OptionItems;
 use App\Models\PaymentHistory;
 use App\Models\Room;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -47,12 +50,14 @@ class UserRoomController extends Controller
         $districts  = Location::select('id', 'name')->where('type', 2)->get();
         $wards      = Location::select('id', 'name')->where('type', 3)->get();
         $categories = Category::select('id', 'name')->get();
+        $optionItems = OptionItems::select('id', 'name')->where('status', 1)->get();
 
         $viewData = [
             'cities'     => $cities,
             'districts'  => $districts,
             'wards'      => $wards,
-            'categories' => $categories
+            'categories' => $categories,
+            'optionItems' => $optionItems
         ];
 
         return view('user.room.create', $viewData);
@@ -75,8 +80,19 @@ class UserRoomController extends Controller
         $data = $this->switchPrice($data);
         $data = $this->switchArea($data);
 
+        if ($request->get('full_address')) {
+            $latLOng = $this->getLatLong($request->get('full_address'));
+            $data['x'] = $latLOng[0];
+            $data['y'] = $latLOng[1];
+        }
+        $distance = $this->getDistance($request->get('full_address'));
+        $data['distance'] = $distance / 1000;
         $room = Room::create($data);
+
         if ($room) {
+            if ($request->get('option')) {
+                $room->roomOptionItem()->sync($request->get('option'));
+            }
             if ($request->file) {
                 $this->syncAlbumImageAndProduct($request->file, $room->id);
             }
@@ -91,7 +107,7 @@ class UserRoomController extends Controller
         $room = Room::where([
             'id'      => $id,
             'auth_id' => \Auth::user()->id
-        ])->first();
+        ])->with(['roomOptionItem'])->first();
 
         if (!$room) return abort(404);
 
@@ -102,6 +118,19 @@ class UserRoomController extends Controller
         $images     = \DB::table('images')
             ->where("room_id", $id)
             ->get();
+        $optionItems = OptionItems::select('id', 'name')->where('status', 1)->get();
+
+        $arrayDiffs = array_diff($optionItems->pluck('id')->toArray(), $room->roomOptionItem->pluck('id')->toArray());
+        $endOption = [];
+        foreach ($optionItems as $optionItem) {
+            $isChecked = in_array($optionItem['id'], $arrayDiffs);
+
+            $endOption[] = [
+                'name' => $optionItem['name'],
+                'id' => $optionItem['id'],
+                'checked' => !$isChecked,
+            ];
+        }
 
         $viewData = [
             'cities'     => $cities,
@@ -109,7 +138,8 @@ class UserRoomController extends Controller
             'wards'      => $wards,
             'images'     => $images,
             'categories' => $categories,
-            'room'       => $room
+            'room'       => $room,
+            'optionItems' => $endOption
         ];
 
 
@@ -134,7 +164,7 @@ class UserRoomController extends Controller
         $data = $this->switchPrice($data);
         $data = $this->switchArea($data);
         //price
-
+        unset($data['option']);
         //
         $room = Room::where([
             'id'      => $id,
@@ -142,6 +172,10 @@ class UserRoomController extends Controller
         ])->update($data);
 
         if ($room) {
+            if ($request->only('option')) {
+                $detailRoom = Room::find($id);
+                $detailRoom->roomOptionItem()->sync($request->get('option'));
+            }
             if ($request->file) {
                 $this->syncAlbumImageAndProduct($request->file, $id);
             }
@@ -393,5 +427,43 @@ class UserRoomController extends Controller
     {
         \DB::table('images')->where('id', $imageID)->delete();
         return redirect()->back();
+    }
+
+    private function getLatLong($request) {
+        $response = Http::get('https://maps.vietmap.vn/api/search/v3', [
+            'apikey' => config('map.api'),
+            'text' => $request,
+            'layers' => 'ADDRESS'
+        ]);
+
+        if ($response->status() == 200) {
+            $refId = $response->json()[0]['ref_id'];
+
+            $res = Http::get('https://maps.vietmap.vn/api/place/v3', [
+                'apikey' => config('map.api'),
+                'refid' => $refId,
+            ]);
+
+            if ($res->status() == 200) {
+                $data = $res->json();
+
+                return [$data['lat'], $data['lng']];
+            }
+        }
+    }
+
+    private function getDistance($request) {
+        $latLong = $this->getLatLong($request);
+        $apiKey = config('map.api');
+
+        $startPoint = '21.038255098347214,105.74805163484348';
+        $endPoint = $latLong[0].',' .$latLong[1]; //'10.801891047584164,106.70660958023404';
+        $url = "https://maps.vietmap.vn/api/route?api-version=1.1&apikey=$apiKey&point=$startPoint&point=$endPoint&vehicle=motorcycle";
+
+        $response = Http::get($url);
+
+        if ($response->status() == 200) {
+            return $response->json()['paths'][0]['distance'];
+        }
     }
 }

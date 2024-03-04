@@ -91,4 +91,11 @@ class AdminRoomController extends Controller
         Room::find($id)->delete();
         return redirect()->back();
     }
+
+    public function show($id)
+    {
+        $room = Room::with(['paymentHistory', 'category', 'images'])->find($id);
+
+        return view('admin.pages.room.view', ['room' => $room]);
+    }
 }

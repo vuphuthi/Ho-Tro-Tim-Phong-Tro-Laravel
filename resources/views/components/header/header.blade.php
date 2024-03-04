@@ -44,6 +44,7 @@
             <a href="{{ route('get_user.recharge.index') }}" title="Nạp tiền">Nạp tiền</a>
         </li>
         <li class="navbar_item {{ \Request::route()->getName() == 'get.service.price' ? 'active' : '' }}"><a href="{{ route('get.service.price') }}">Bảng giá</a></li>
+        <li class="navbar_item {{ \Request::route()->getName() == 'map.user.index' ? 'active' : '' }}"><a href="{{ route('map.user.index') }}">Map</a></li>
     </ul>
 </nav>
 

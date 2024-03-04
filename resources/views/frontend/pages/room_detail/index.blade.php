@@ -174,11 +174,7 @@
                     <div class="map">
                         {!! $room->map !!}
                     </div>
-                    <p class="map-description">Mọi thông tin trên website chỉ mang tính chất tham khảo. Nếu bạn có phản hồi với tin đăng này (báo xấu, tin đã cho thuê, không liên lạc được,...), vui lòng thông báo để PhòngTrọ123 có thể xử lý.</p>
-                    <a class="btn btn-report" target="_blank" rel="nofollow" href="/contact">
-                        <i class="fa fa-flag" aria-hidden="true"></i> Gửi phản hồi
-                    </a>
-                </div>
+
             </div>
             <div class="card b-related">
                 <div class="card-header">

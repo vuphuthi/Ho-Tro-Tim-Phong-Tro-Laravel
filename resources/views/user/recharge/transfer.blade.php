@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app_master')
+{{-- @extends('frontend.layouts.app_master')
 @section('title', 'Trang chủ')
 @push('css')
     <link href="/css/home.css" rel="stylesheet">
@@ -94,4 +94,4 @@
 
 @push('script')
     <script src="/js/home.js"></script>
-@endpush
+@endpush --}}

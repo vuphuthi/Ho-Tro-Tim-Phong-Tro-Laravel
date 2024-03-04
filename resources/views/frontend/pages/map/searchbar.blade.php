@@ -1,5 +1,5 @@
 <div id="searchbar">
-    <form role="search" method="GET" action="{{ route('get.room.search') }}" class="searchform js-form-submit-data">
+    <form role="search" method="GET" action="{{ route('map.user.index') }}" class="searchform js-form-submit-data">
         <div class="search_field" style="justify-content: space-between">
             <style>
                 .search_field_item {

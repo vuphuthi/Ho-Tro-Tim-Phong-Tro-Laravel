@@ -12,6 +12,7 @@ class SearchRoomController extends Controller
     public function index(Request $request)
     {
         $data = SearchRoomService::index($request);
+
         if ($request->city_id)
         {
             $districts = Location::where('parent_id', $request->city_id )->get();

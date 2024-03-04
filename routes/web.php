@@ -64,6 +64,9 @@ Route::group(['namespace' => 'Frontend'], function () {
 });
 Route::get('district', 'User\UserRoomController@loadDistrict')->name('get_user.load.district');
 Route::get('wards', 'User\UserRoomController@loadWards')->name('get_user.load.wards');
-Route::get('/toado', 'User\UserRoomController@yx')->name('get_user.toado');;
+Route::get('/toado', 'User\UserRoomController@yx')->name('get_user.toado');
+Route::get('map', 'MapController@index')->name('map.user.index');
+
+;
 include 'route_user.php';
 include 'route_admin.php';
